@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+        <div class="col-lg-3 col-xs-8">
+        <!-- small box -->
+        <div class="small-box bg-blue">
+            <div class="inner">
+                <h3>{{ totalNum }}</h3>
+                <p>老化机器总数量</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-person-stalker"></i>
+            </div>
+            <a href="/control/serverdetail" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+        <div class="col-lg-3 col-xs-8">
+        <!-- small box -->
+        <div class="small-box bg-green">
+            <div class="inner">
+                <h3>{{ runNum }}</h3>
+                <p>运行矿机数量</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-person"></i>
+            </div>
+            <a href="/control/serverdetail?name=run&status=running" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-xs-8">
+        <!-- small box -->
+        <div class="small-box bg-yellow-active">
+            <div class="inner">
+                <h3>{{ stopNum }}11</h3>
+                <p>老化异常数量</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-stop"></i>
+            </div>
+            <a href="#" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-xs-8">
+        <!-- small box -->
+        <div class="small-box bg-red-active">
+            <div class="inner">
+                <h3>{{ offNum }}</h3>
+                <p>老化错误数量</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-locked"></i>
+            </div>
+            <a href="/control/serverdetail?name=error&status=erro" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+<script src="{% static 'control/scripts/index.js' %}"></script>
+{% endblock %}

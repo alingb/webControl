@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div id="toolbar" class="btn-group">
+        <button type="button" class="btn btn-primary" id="reset_luk">
+            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+            设置关机时间
+        </button>
+        <button id="off_service" type="button" class="btn btn-danger">
+            <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+            关闭设备
+        </button>
+    </div>
+    <table id="serverdetail" class="table table-hover" width="95%" align="center"
+           style=" word-break:break-all;"></table>
+{% endblock %}
+{% block script %}
+<script src="{% static 'control/scripts/serverdetail.js' %}"></script>
+{% endblock %}
