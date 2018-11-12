@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 import json
+import time
 
 from django.db.models import Q
 from django.forms import model_to_dict
@@ -86,13 +87,18 @@ def serverInfo(request):
 
 
 def control(req):
+    # Salt = salt.client.LocalClient()
     state = req.POST.get('state')
+    msg = req.POST.get('msg')
+    cmd = ''
     if state == "bios":
         msg = req.POST.get('msg')
         if msg:
             msg = json.loads(msg)
         for each in msg:
             print each['ip']
+            time.sleep(10)
+            # Salt.cmd('{}'.format(each['ip'], 'cmd.run', ['{}'.format(cmd)], timeout=10))
     elif state == "bmc":
         msg = req.POST.get('msg')
         if msg:

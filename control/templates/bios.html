@@ -23,6 +23,38 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">请输入BIOS信息</h4>
+                </div>
+                <div class="modal-body">
+                    <label>
+                        <select class="selectpicker" multiple data-actions-box="true" data-style="btn-primary">
+                            <option value="1" data-content="<span class='label label-success'>BIOS1</span>">BIOS1</option>
+                            <option value="2" data-content="<span class='label label-info'>BIOS2</span>">BIOS2</option>
+                            <option value="3" data-content="<span class='label label-warning'>BIOS3</span>">BIOS3
+                            </option>
+                            <option value="4" data-content="<span class='label label-danger'>BIOS4</span>">BIOS4
+                            </option>
+                        </select>
+                    </label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="bios_close" class="btn btn-default" data-dismiss="modal"><span
+                            class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭
+                    </button>
+                    <button type="button" id="bios_submit" class="btn btn-primary"><span
+                            class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">请输入FRU信息</h4>
                 </div>
                 <div class="modal-body">
