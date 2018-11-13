@@ -45,11 +45,11 @@ var FileTableInit = function () {
                 if (row.stress_test == "running") {
                     strclass = 'success';//还有一个active
                 }
-                else if (row.stress_test == 75) {
-                    strclass = 'warning';
+                else if (row.stress_test == "wait") {
+                    strclass = 'active';
                 }
                 else {
-                    strclass = 'warning'
+                    strclass = 'info'
                 }
                 return {classes: strclass}
             },
