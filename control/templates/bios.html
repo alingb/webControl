@@ -27,7 +27,7 @@
                 </div>
                 <div class="modal-body">
                     <label>
-                        <select class="selectpicker" multiple data-actions-box="true" data-style="btn-primary">
+                        <select class="selectpicker" id="bios_selectpicker" data-style="btn-primary">
                             <option value="1" data-content="<span class='label label-success'>BIOS1</span>">BIOS1</option>
                             <option value="2" data-content="<span class='label label-info'>BIOS2</span>">BIOS2</option>
                             <option value="3" data-content="<span class='label label-warning'>BIOS3</span>">BIOS3
@@ -55,14 +55,67 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">请输入BMC信息</h4>
+                </div>
+                <div class="modal-body">
+                    <label>
+                        <select class="selectpicker" id="bmc_selectpicker" data-style="btn-primary">
+                            <option value="1" data-content="<span class='label label-success'>BMC1</span>">BMC1</option>
+                            <option value="2" data-content="<span class='label label-info'>BIOS2</span>">BMC2</option>
+                            <option value="3" data-content="<span class='label label-warning'>BIOS3</span>">BMC3
+                            </option>
+                            <option value="4" data-content="<span class='label label-danger'>BIOS4</span>">BMC4
+                            </option>
+                        </select>
+                    </label>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="bmc_close" class="btn btn-default" data-dismiss="modal"><span
+                            class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭
+                    </button>
+                    <button type="button" id="bmc_submit" class="btn btn-primary"><span
+                            class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="myModalLabel">请输入FRU信息</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label for="txt_name">FRU SN</label>
-                        <input type="text" name="txt_statu" class="form-control" id="fru_msg"
-                               placeholder="FRU">
-                    </div>
+                    <form role="form" enctype='multipart/form-data' id="fru_form" action="/control/mkexec" method="post">
+                        <div class="box-body">
+                            <div class="form-group">
+                                <label for="InputFile">FRU SN</label>
+                                <input type="file" id="InputFile" name="fru_sn">
+                            </div>
+                            <div class="form-group">
+                                <input type="hidden" id="data" name="msg">
+                            </div>
+                            <div class="form-group">
+                                <label>
+                        <select class="selectpicker" name="fru_name" id="bmc_selectpicker" data-style="btn-primary">
+                            <option value="1" data-content="<span class='label label-success'>FRU1</span>">FRU1</option>
+                            <option value="2" data-content="<span class='label label-info'>FRU2</span>">FRU2</option>
+                            <option value="3" data-content="<span class='label label-warning'>FRU3</span>">FRU3
+                            </option>
+                            <option value="4" data-content="<span class='label label-danger'>FRU4</span>">FRU4
+                            </option>
+                        </select>
+                    </label>
+                            </div>
+                        </div>
+{#                        <div class="box-footer">#}
+{#                            <button type="submit" id="form_submit" class="btn btn-primary">提交</button>#}
+{#                        </div>#}
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" id="fru_close" class="btn btn-default" data-dismiss="modal"><span

@@ -4,9 +4,10 @@ from __future__ import unicode_literals
 import json
 import time
 
+import salt.client
 from django.db.models import Q
 from django.forms import model_to_dict
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render
 from web.models import *
 
@@ -87,38 +88,53 @@ def serverInfo(request):
 
 
 def control(req):
-    # Salt = salt.client.LocalClient()
+    Salt = salt.client.LocalClient()
     state = req.POST.get('state')
-    msg = req.POST.get('msg')
-    cmd = ''
+    name = req.POST.get('name')
+    file = req.FILES.get('fru_sn')
     if state == "bios":
+        cmd = '/bios/{}/BIOS_lnx64.sh'.format(name)
         msg = req.POST.get('msg')
-        if msg:
-            msg = json.loads(msg)
-        for each in msg:
-            print each['ip']
-            time.sleep(10)
-            # Salt.cmd('{}'.format(each['ip'], 'cmd.run', ['{}'.format(cmd)], timeout=10))
-    elif state == "bmc":
-        msg = req.POST.get('msg')
-        if msg:
-            msg = json.loads(msg)
-        for each in msg:
-            print each['ip']
-    elif state == "fru":
-        msg = req.POST.get('msg')
-        if msg:
-            msg = json.loads(msg)
-        for each in msg:
-            print each['ip']
-    elif state == "run":
-        msg = req.POST.get('msg')
-        info = req.POST.get('info')
-        if info:
-            info = json.loads(info)
         if msg:
             msg = json.loads(msg)
             for each in msg:
+                Salt.cmd('{}'.format(each['ip']), 'cmd.run', ['{}'.format(cmd)], timeout=10)
+                time.sleep(10)
+    elif state == "bmc":
+        cmd = '/bmc/{}/BMC_lnx64.sh'.format(name)
+        msg = req.POST.get('msg')
+        if msg:
+            msg = json.loads(msg)
+            for each in msg:
+                Salt.cmd('{}'.format(each['ip']), 'cmd.run', ['{}'.format(cmd)], timeout=10)
+    elif file:
+        sn = file.readlines()
+        for i in sn:
+            print i.strip()
+        cmd = ''
+        msg = req.POST.get('msg')
+        fru_name = req.POST.get('fru_name')
+        print fru_name
+        if msg:
+            msg = json.loads(msg)
+            if len(msg) != len(sn):
+                return
+            for each in msg:
+                print each['ip']
+                try:
+                    Salt.cmd('{}'.format(each['ip']), 'cmd.run', ['{}'.format(cmd)], timeout=1)
+                except Exception:
+                    pass
+        return HttpResponseRedirect('/control/bios')
+    elif state == "run":
+        cmd = ''
+        msg = req.POST.get('msg')
+        info = req.POST.get('info')
+        if info and msg:
+            info = json.loads(info)
+            msg = json.loads(msg)
+            for each in msg:
                 for i in info:
+                    Salt.cmd('{}'.format(each['ip']), 'cmd.run', ['{}'.format(cmd)], timeout=10)
                     print each['ip'], i
     return HttpResponse()

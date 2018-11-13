@@ -53,6 +53,9 @@ var FileTableInit = function () {
                 }
                 return {classes: strclass}
             },
+            // responseHandler: function (data) {
+            //     return data.rows;
+            // },
             columns: [{
                 checkbox: true
             }, {

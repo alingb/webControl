@@ -17,7 +17,7 @@ var FileTableInit = function () {
     //初始化Table
     oFileTableInit.Init = function () {
         $('#bios').bootstrapTable({
-            url: '/control/serverinfo?state=running',         //请求后台的URL（*）
+            url: '/control/serverinfo?state=OS off 2018-11-12 15:43',         //请求后台的URL（*）
             method: 'get',    //请求方式（*）
             toolbar: '#toolbar',                //工具按钮用哪个容器
             striped: true,                      //是否显示行间隔色
@@ -53,7 +53,7 @@ var FileTableInit = function () {
                     strclass = 'success';//还有一个active
                 }
                 else if (row.exec_state == "fail") {
-                    strclass = 'warning';
+                    strclass = 'info';
                 }
                 else {
                     strclass = "info";
@@ -139,11 +139,12 @@ function buttonStart() {
             }
             else {
                 $("#myModal").modal();
+                let name = $("#bios_selectpicker").val();
                 $("#bios_submit").click(function () {
                     $.ajax({
                         type: "post",
                         url: url,
-                        data: {"state": "bios", "msg": JSON.stringify(table)},
+                        data: {"state": "bios", "name": name, "msg": JSON.stringify(table)},
                         // success: function (data, status) {
                         //     if (status === "success") {
                         //         toastr.success('BIOS Execute sucess!');
@@ -172,21 +173,29 @@ function buttonStart() {
                 toastr.error("请选择需要执行的设备")
             }
             else {
-                $.ajax({
-                    type: "post",
-                    url: url,
-                    data: {"state": "bmc", "msg": JSON.stringify(table)},
-                    success: function (data, status) {
-                        if (status === "success") {
-                            toastr.success('BMC Execute sucess!');
-                            $("#bios").bootstrapTable('refresh');
+                $("#myModal1").modal();
+                let name = $("#bmc_selectpicker").val();
+                $("#bmc_submit").click(function () {
+                    $.ajax({
+                        type: "post",
+                        url: url,
+                        data: {"state": "bmc", "name": name, "msg": JSON.stringify(table)},
+                        // success: function (data, status) {
+                        //     if (status === "success") {
+                        //         toastr.success('BIOS Execute sucess!');
+                        //         $("#bios").bootstrapTable('refresh');
+                        //     }
+                        //
+                        // },
+                        error: function () {
+                            toastr.error('BMC Execute Error!');
                         }
-
-                    },
-                    error: function () {
-                        toastr.error('BMC Execute Error!');
-                    }
-                })
+                    });
+                    $("#bmc_button").attr({"disabled": "disabled"});
+                    toastr.success('BMC Execute sucess!');
+                    $("#bmc_close").click();
+                    $("#bios").bootstrapTable('refresh');
+                });
             }
         }
     );
@@ -196,36 +205,20 @@ function buttonStart() {
         if (table.length <= 0) {
             toastr.error("请选择需要执行的设备")
         } else {
-            $('#myModal').modal();
-            $("#myModal").find("#fru_msg").val("");
+            $('#myModal2').modal();
+            $("#myModal2").find("#fru_msg").val("");
             let data = JSON.stringify(table);
             $("#fru_submit").click(function () {
-                    let fru_msg = $("#fru_msg").val();
-                    if (fru_msg.length <= 0) {
-                        // console.log(data);
-                        toastr.error("请输入FRU信息");
+                    if (data.length <= 0) {
+                        toastr.error("请选择需要执行的设备");
                         return;
                     }
-                    let bios = $(".selectpicker").val();
-                    console.log(bios);
+                    $("#data").val(data);
+                    $("#fru_form").submit();
                     $("#fru_close").click();
-                    $.ajax({
-                        type: "post",
-                        url: url,
-                        data: {"state": "fru", "msg": data},
-                        success: function (data, status) {
-                            if (status === "success") {
-                                toastr.success('FRU Execute sucess!');
-                                $("#bios").bootstrapTable('refresh');
-                            }
-
-                        },
-                        error: function () {
-                            toastr.error('FRU Execute Error!');
-                        }
-                    })
+                    // window.location.href = '/control/bios';
                 }
-            )
+            );
         }
     })
 }

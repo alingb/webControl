@@ -17,7 +17,7 @@ var FileTableInit = function () {
     //初始化Table
     oFileTableInit.Init = function () {
         $('#bios').bootstrapTable({
-            url: '/control/serverinfo?state=running',         //请求后台的URL（*）
+            url: '/control/serverinfo?state=wait',         //请求后台的URL（*）
             method: 'get',    //请求方式（*）
             toolbar: '#toolbar',                //工具按钮用哪个容器
             striped: true,                      //是否显示行间隔色
@@ -53,7 +53,7 @@ var FileTableInit = function () {
                     strclass = 'success';//还有一个active
                 }
                 else if (row.exec_state == "fail") {
-                    strclass = 'warning';
+                    strclass = 'info';
                 }
                 else {
                     strclass = "info";
@@ -138,21 +138,30 @@ function buttonStart() {
                 toastr.error("请选择需要执行的设备")
             }
             else {
-                $.ajax({
-                    type: "post",
-                    url: url,
-                    data: {"state": "bios", "msg": JSON.stringify(table)},
-                    success: function (data, status) {
-                        if (status === "success") {
-                            toastr.success('BIOS Execute sucess!');
-                            $("#bios").bootstrapTable('refresh');
+                $("#myModal").modal();
+                $("#bios_submit").click(function () {
+                    $.ajax({
+                        type: "post",
+                        url: url,
+                        data: {"state": "bios", "msg": JSON.stringify(table)},
+                        // success: function (data, status) {
+                        //     if (status === "success") {
+                        //         toastr.success('BIOS Execute sucess!');
+                        //         $("#bios").bootstrapTable('refresh');
+                        //     }
+                        //
+                        // },
+                        error: function () {
+                            toastr.error('BIOS Execute Error!');
                         }
+                    });
+                    $("#bios_button").attr({"disabled": "disabled"});
+                    toastr.success('BIOS Execute sucess!');
+                    $("#bios_close").click();
+                    $("#bios").bootstrapTable('refresh');
+                });
 
-                    },
-                    error: function () {
-                        toastr.error('BIOS Execute Error!');
-                    }
-                })
+
             }
         }
     );
