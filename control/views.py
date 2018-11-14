@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 import json
 import time
 
-import salt.client
+from saltstack import SaltApi
 from django.db.models import Q
 from django.forms import model_to_dict
 from django.http import HttpResponse, HttpResponseRedirect, Http404
@@ -88,7 +88,8 @@ def serverInfo(request):
 
 
 def control(req):
-    Salt = salt.client.LocalClient()
+    salt_api = "https://127.0.0.1:8000/"
+    Salt = SaltApi(salt_api)
     state = req.POST.get('state')
     name = req.POST.get('name')
     file = req.FILES.get('fru_sn')
@@ -98,7 +99,7 @@ def control(req):
         if msg:
             msg = json.loads(msg)
             for each in msg:
-                Salt.cmd('{}'.format(each['ip']), 'cmd.run', ['{}'.format(cmd)], timeout=10)
+                Salt.cmd('{}'.format(each['ip']), 'cmd.run', ['{}'.format(cmd)])
                 time.sleep(10)
     elif state == "bmc":
         cmd = '/bmc/{}/BMC_lnx64.sh'.format(name)
@@ -106,7 +107,7 @@ def control(req):
         if msg:
             msg = json.loads(msg)
             for each in msg:
-                Salt.cmd('{}'.format(each['ip']), 'cmd.run', ['{}'.format(cmd)], timeout=10)
+                Salt.cmd('{}'.format(each['ip']), 'cmd.run', ['{}'.format(cmd)])
     elif file:
         sn = file.readlines()
         for i in sn:
@@ -122,7 +123,7 @@ def control(req):
             for each in msg:
                 print each['ip']
                 try:
-                    Salt.cmd('{}'.format(each['ip']), 'cmd.run', ['{}'.format(cmd)], timeout=1)
+                    Salt.cmd('{}'.format(each['ip']), 'cmd.run', ['{}'.format(cmd)])
                 except Exception:
                     pass
         return HttpResponseRedirect('/control/bios')
@@ -135,6 +136,6 @@ def control(req):
             msg = json.loads(msg)
             for each in msg:
                 for i in info:
-                    Salt.cmd('{}'.format(each['ip']), 'cmd.run', ['{}'.format(cmd)], timeout=10)
+                    Salt.cmd('{}'.format(each['ip']), 'cmd.run', ['{}'.format(cmd)])
                     print each['ip'], i
     return HttpResponse()
