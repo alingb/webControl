@@ -4,6 +4,8 @@ from __future__ import unicode_literals
 import json
 import time
 
+from django.contrib.auth.decorators import login_required
+
 from saltstack import SaltApi
 from django.db.models import Q
 from django.forms import model_to_dict
@@ -14,7 +16,7 @@ from web.models import *
 
 # Create your views here.
 
-
+@login_required
 def index(req):
     host = Host.objects.all()
     totalNum = len(host)
@@ -25,22 +27,33 @@ def index(req):
     return render(req, 'index.html', {'totalNum': totalNum, 'runNum': runNum,
                                              'offNum': offNum})
 
-
+@login_required
 def serverDetail(req):
     global name, status
     name = req.GET.get("name")
     status = req.GET.get("status")
     return render(req, 'serverdetail.html')
 
-
+@login_required
 def bios(req):
-    return render(req, 'bios.html')
+    bios = {1: "D51B-2U",
+            2: "T41S-2U",
+            3: "ASR1100",
+            4: "RS300-E9-PS4",
+            5: "RS720Q-E8",
+            6: "ESC8000G3",
+            7: "Z10PA-D8",
+            8: "K880G3",
+            9: "N880G2",
+            10: "SR205-2"
+            }
+    return render(req, 'bios.html', {"bios": bios})
 
-
+@login_required
 def execute(req):
     return render(req, 'execute.html')
 
-
+@login_required
 def serverInfo(request):
     limit = request.GET.get("limit")
     offset = request.GET.get("offset")
@@ -86,7 +99,7 @@ def serverInfo(request):
                                                 'status', 'bios', 'bmc', 'ip', 'stress_test']))
     return HttpResponse(json.dumps({"rows": data, "total": lenth}))
 
-
+@login_required
 def control(req):
     salt_api = "https://127.0.0.1:8000/"
     Salt = SaltApi(salt_api)
@@ -139,3 +152,23 @@ def control(req):
                     Salt.cmd('{}'.format(each['ip']), 'cmd.run', ['{}'.format(cmd)])
                     print each['ip'], i
     return HttpResponse()
+
+@login_required
+def infoPaser(req):
+    val = str(req.POST.get('val'))
+    if val:
+        if val.isdigit():
+            val = int(val)
+    name_list = {
+        1: ["SunMnet-M3", "UDS1022"],
+        2: ["UDS2000-C", "UDS2000-E", "zhongdianfufu"],
+        3: ['ELOG', 'RCP', 'RCP 1.0', 'meidian'],
+        4: ['RG-RCM1000-Office', 'RG-RCM1000-Smart', 'RG-RCM1000-Edu'],
+        5: ['RG-ONC-AIO-CTL'],
+        6: ['RG-RCD16000Pro-3D'],
+        7: ['tianrongxin'],
+        8: ['RG-RCD6000-Main', 'RG-RCD6000-Office', 'RG-iData-Server', 'RG-RACC 5000', 'RG-RCD3000-Office', 'RG-RCD6000E V3', 'haiyunjiexun'],
+        9: ['Meidian'],
+        10: ['DT-G2-U211', 'CZ-2U-K888G4'],
+    }
+    return HttpResponse(json.dumps(name_list[val]))

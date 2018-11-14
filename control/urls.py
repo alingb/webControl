@@ -8,4 +8,5 @@ urlpatterns = [
     url(r'execute', execute, name='execute'),
     url(r'serverinfo', serverInfo, name='serverinfo'),
     url(r'mkexec', control, name="control"),
+    url(r'infopaser', infoPaser, name="infopaser"),
 ]

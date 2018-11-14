@@ -23,19 +23,33 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">请输入BIOS信息</h4>
+                    <h4 class="modal-title" id="myModalLabel">请选择BIOS信息</h4>
                 </div>
                 <div class="modal-body">
-                    <label>
-                        <select class="selectpicker" id="bios_selectpicker" data-style="btn-primary">
-                            <option value="UDS1022" data-content="<span class='label label-success'>UDS1022</span>">UDS1022</option>
-                            <option value="2" data-content="<span class='label label-info'>BIOS2</span>">BIOS2</option>
-                            <option value="3" data-content="<span class='label label-warning'>BIOS3</span>">BIOS3
-                            </option>
-                            <option value="4" data-content="<span class='label label-danger'>BIOS4</span>">BIOS4
-                            </option>
-                        </select>
-                    </label>
+                    <form>
+                        <div class="form-group">
+                            <label for="bios_selectpicker" class="control-label">机器名称:</label>
+                            <select class="selectpicker" id="bios_selectpicker" data-style="btn-primary">
+                                <option value="0" data-content="<span class='label labrl-default'>---</span>">---
+                                </option>
+                                {% for each in bios.items %}
+                                <option value="{{ each.0 }}" data-content="<span class='label label-success'>{{ each.1 }}</span>">
+                                    {{ each.1 }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group" id="bios_name" style="display: none">
+                            <label for="bios_name_selectpicker" class="control-label">产品名称:</label>
+                                <select class="selectpicker" id="bios_name_selectpicker" data-style="btn-primary">
+                                    {% for each in name %}
+                                    <option value="{{ each }}"
+                                            data-content="<span class='label label-success'>{{ each }}</span>">
+                                    </option>
+                                    {% endfor %}
+                                </select>
+                        </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" id="bios_close" class="btn btn-default" data-dismiss="modal"><span
@@ -55,7 +69,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">请输入BMC信息</h4>
+                    <h4 class="modal-title" id="myModalLabel">请选择BMC信息</h4>
                 </div>
                 <div class="modal-body">
                     <label>

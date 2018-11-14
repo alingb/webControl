@@ -131,6 +131,31 @@ var FileTableInit = function () {
 
 
 function buttonStart() {
+    $("#bios_selectpicker").bind("change",function () {
+        let dataval = $(this).val();
+        if (dataval == 0 ){
+            $("#bios_name").hide();
+        }
+        else {
+            $("#bios_name").show();
+        }
+        $.ajax({
+            type: "post",
+            url: "/control/infopaser",
+            data:{"val": dataval},
+            success:function (data, status) {
+                 if (status === "success") {
+                     data = jQuery.parseJSON(data);
+                     $('#bios_name_selectpicker').find("option").remove();
+                     for (var i = 0; i < data.length; i++) {
+                         $("#bios_name_selectpicker").append($("<option></option>").attr("value", data[i]).attr("data-content", "<span class='label label-info'>" +  data[i] + "</span>").text(data[i])).trigger("change");
+                         $('#bios_name_selectpicker').selectpicker('val', '').trigger("change");
+                         $('#bios_name_selectpicker').selectpicker('refresh');
+                     }
+                 }
+            }
+        })
+    });
     let url = "/control/mkexec";
     $("#bios_button").click(function () {
             let table = $("#bios").bootstrapTable('getSelections');
@@ -139,8 +164,10 @@ function buttonStart() {
             }
             else {
                 $("#myModal").modal();
-                let name = $("#bios_selectpicker").val();
                 $("#bios_submit").click(function () {
+                    let name = $("#bios_selectpicker").val();
+                    let name1 = $("#bios_name_selectpicker").val();
+                    console.log(name1);
                     $.ajax({
                         type: "post",
                         url: url,
@@ -174,8 +201,8 @@ function buttonStart() {
             }
             else {
                 $("#myModal1").modal();
-                let name = $("#bmc_selectpicker").val();
                 $("#bmc_submit").click(function () {
+                    let name = $("#bmc_selectpicker").val();
                     $.ajax({
                         type: "post",
                         url: url,
