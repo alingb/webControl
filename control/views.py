@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from saltstack import SaltApi
 from django.db.models import Q
 from django.forms import model_to_dict
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render
 from web.models import *
 
@@ -23,10 +23,9 @@ from web.models import *
 def index(req):
     totalNum = Host.objects.count()
     runNum = Host.objects.filter(stress_test="running").count()
-    # stopNum = len(Host.objects.filter(Q(stress_test="running") |
-    #                                   Q(stress_test__contains="OS off")))
+    stopNum = Host.objects.filter(Q(stress_test="reload")).count()
     offNum = Host.objects.filter(status__contains="erro").count()
-    return render(req, 'index.html', {'totalNum': totalNum, 'runNum': runNum, 'offNum': offNum})
+    return render(req, 'index.html', {'totalNum': totalNum, 'runNum': runNum, 'offNum': offNum, "stopNum": stopNum})
 
 
 @login_required
@@ -68,12 +67,15 @@ def serverInfo(request):
     sort = request.GET.get("sort")
     sortOrder = request.GET.get("sortOrder")
     host = ''
-    if name and status:
-        if name == "run":
-            host = Host.objects.filter(stress_test=status)
-        elif name == "error":
-            host = Host.objects.filter(status__contains=status)
-        name, status = '', ''
+    try:
+        if name and status:
+            if name == "run":
+                host = Host.objects.filter(stress_test=status)
+            elif name == "error":
+                host = Host.objects.filter(status__contains=status)
+            name, status = '', ''
+    except Exception:
+        pass
     if not host:
         host = Host.objects.all()
     if state:
@@ -127,25 +129,24 @@ def control(req):
                 Salt.cmd('{}'.format(each['ip']), 'cmd.run', ['{}'.format(cmd)])
     elif file:
         sn = file.readlines()
-        for i in sn:
-            print i.strip()
-        cmd = ''
         msg = req.POST.get('msg')
         fru_name = req.POST.get('fru_name')
-        print fru_name
+        num = 0
         if msg:
             msg = json.loads(msg)
             if len(msg) != len(sn):
-                return
+                return HttpResponseBadRequest()
             for each in msg:
-                print each['ip']
+                print each['ip'], sn[num].strip()
+                cmd = 'echo "{}" | /fru/{}/FRU_lnx64.sh'.format(sn[num].strip(), fru_name)
+                num += 1
+                print cmd
                 try:
                     Salt.cmd('{}'.format(each['ip']), 'cmd.run', ['{}'.format(cmd)])
                 except Exception:
                     pass
         return HttpResponseRedirect('/control/bios')
     elif state == "run":
-        cmd = ''
         msg = req.POST.get('msg')
         info = req.POST.get('info')
         if info and msg:
@@ -153,7 +154,7 @@ def control(req):
             msg = json.loads(msg)
             for each in msg:
                 for i in info:
-                    Salt.cmd('{}'.format(each['ip']), 'cmd.run', ['{}'.format(cmd)])
+                    Salt.cmd('{}'.format(each['ip']), 'service.start', ['{}'.format(i.lower())])
                     print each['ip'], i
     return HttpResponse()
 
@@ -167,7 +168,7 @@ def infoPaser(req):
     name_list = {
         1: ["SunMnet-M3", "UDS1022"],
         2: ["UDS2000-C", "UDS2000-E", "zhongdianfufu"],
-        3: ['ELOG', 'RCP', 'RCP 1.0', 'meidian'],
+        3: ['ELOG', 'RCP', 'RCP1.0', 'meidian'],
         4: ['RG-RCM1000-Office', 'RG-RCM1000-Smart', 'RG-RCM1000-Edu'],
         5: ['RG-ONC-AIO-CTL'],
         6: ['RG-RCD16000Pro-3D'],

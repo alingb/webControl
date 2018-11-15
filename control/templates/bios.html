@@ -71,10 +71,10 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">请输入FRU信息</h4>
+                    <h4 class="modal-title" id="myModalLabel">请选择FRU信息</h4>
                 </div>
                 <div class="modal-body">
-                    <form role="form" enctype='multipart/form-data' id="fru_form" action="/control/mkexec"
+                    <form role="form" enctype='multipart/form-data' id="fru_form" action="{% url "control" %}"
                           method="post">
                         <div class="box-body">
                             <div class="form-group">
@@ -97,9 +97,9 @@
                                     {% endfor %}
                                 </select>
                             </div>
-                            <div class="form-group" id="fru_name" style="display: none">
+                            <div class="form-group"  id="fru_name" style="display: none">
                                 <label for="fru_name_selectpicker" class="control-label">产品名称:</label>
-                                <select class="selectpicker" id="fru_name_selectpicker" data-style="btn-primary">
+                                <select class="selectpicker" name="fru_name" id="fru_name_selectpicker" data-style="btn-primary">
                                     {% for each in name %}
                                         <option value="{{ each }}"
                                                 data-content="<span class='label label-success'>{{ each }}</span>">
