@@ -16,11 +16,13 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from serverControl.views import *
+from control.views import index
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'login/', login_user, name="login"),
     url(r'logout/', logout_user, name="logout"),
-    url(r'signup/', signup, name="sigup"),
+    # url(r'signup/', signup, name="sigup"),
+    url(r'^$', index, name="index"),
     url(r'control/', include('control.urls')),
 ]

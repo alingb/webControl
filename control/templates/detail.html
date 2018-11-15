@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="bs-example bs-example-tabs" data-example-id="togglable-tabs">
+        <ul id="myTabs" class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#home" id="home-tab" role="tab" data-toggle="tab"
+                                                      aria-controls="home" aria-expanded="true">Home</a></li>
+            <li role="presentation" class=""><a href="#profile" role="tab" id="profile-tab" data-toggle="tab"
+                                                aria-controls="profile" aria-expanded="false">Sensor</a></li>
+            {#            <li role="presentation" class="dropdown">#}
+            {#                <a href="#" id="myTabDrop1" class="dropdown-toggle" data-toggle="dropdown"#}
+            {#                   aria-controls="myTabDrop1-contents" aria-expanded="false">Dropdown <span class="caret"></span></a>#}
+            {#                <ul class="dropdown-menu" aria-labelledby="myTabDrop1" id="myTabDrop1-contents">#}
+            {#                    <li class=""><a href="#dropdown1" role="tab" id="dropdown1-tab" data-toggle="tab"#}
+            {#                                    aria-controls="dropdown1" aria-expanded="false">@fat</a></li>#}
+            {#                    <li class=""><a href="#dropdown2" role="tab" id="dropdown2-tab" data-toggle="tab"#}
+            {#                                    aria-controls="dropdown2" aria-expanded="false">@mdo</a></li>#}
+            {#                </ul>#}
+            {#            </li>#}
+        </ul>
+        <div id="myTabContent" class="tab-content">
+            <div role="tabpanel" class="tab-pane fade active in" id="home" aria-labelledby="home-tab">
+                <table class="table table-hover" width="95%" align="center" style=" word-break:break-all;">
+                    <tr>
+                    </tr>
+                    <tbody>
+                    <tr>
+                        <th>CHECK STAT</th>
+                        <td>
+                            <pre>{{ form.CHECK_STAT }}</pre>
+                        </td>
+                        <th>IP</th>
+                        <td>
+                            <pre>{{ form.IP }}</pre>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>SN</th>
+                        <td>
+                            <pre>{{ form.SN }}</pre>
+                        </td>
+                        <th>SN1</th>
+                        <td>
+                            <pre>{{ form.SN1 }}</pre>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>NAME</th>
+                        <td>
+                            <pre>{{ form.NAME }}</pre>
+                        </td>
+                        <th>FAMILY</th>
+                        <td>
+                            <pre>{{ form.FAMILY }}{{ form.FIMILY }}</pre>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>TIME</th>
+                        <td>
+                            <pre>{{ form.TIME }}</pre>
+                        </td>
+                        <th>BOOT_TIME</th>
+                        <td>
+                            <pre>{{ form.BOOT_TIME }}</pre>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>BIOS TIME</th>
+                        <td>
+                            <pre>{{ form.BIOS_TIME }}</pre>
+                        </td>
+                        <th>CPU</th>
+                        <td>
+                            <pre>{{ form.CPU }}</pre>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>MEMORY</th>
+                        <td>
+                            <pre>{{ form.MEMORY_INFO }}</pre>
+                        </td>
+                        <th>DISK</th>
+                        <td>
+                            <pre>{{ form.DISK_INFO }}</pre>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="1">RAID</th>
+                        <td colspan="3">
+                            <pre>{{ form.RAID_INFO }}</pre>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>MAC</th>
+                        <td>
+                            <pre>{{ form.MAC_INFO }}</pre>
+                        </td>
+                        <th>NETWORK</th>
+                        <td>
+                            <pre>{{ form.NETWORK_INFO }}</pre>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>BIOS VERSION</th>
+                        <td>
+                            <pre>{{ form.BIOS_VERSION }}</pre>
+                        </td>
+                        <th>BMC VERSION</th>
+                        <td>
+                            <pre>{{ form.BMC_VERSION }}</pre>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="1">PCIE</th>
+                        <td colspan="3">
+                            <pre>{{ form.PCIE_INFO }}</pre>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="1">FRU</th>
+                        <td colspan="3" id="fru">
+                            <pre>{{ form.FRU_INFO }}</pre>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="1">LOCATE DISK</th>
+                        <td colspan="3">
+                            <pre>{{ form.LOCATE_DISK }}</pre>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="1">LOCATE MEMORY</th>
+                        <td colspan="3" id="locate">
+                            <pre>{{ form.LOCATE_MEMORY }}</pre>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="1">SEL LOG</th>
+                        <td colspan="3" id="sel">
+                            <pre>{{ all.sel }}</pre>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th colspan="1">SMART INFO</th>
+                        <td colspan="3" id="smart">
+                            <pre>{{ all.smart_info }}</pre>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="profile" aria-labelledby="profile-tab">
+                <table class="table table-hover" width="95%" align="center" style=" word-break:break-all;" >
+                    <tr>
+                        <th>
+                            message
+                        </th>
+                        <td>
+                                <pre style="height: 800px">{{ all.message }}<br><br>IPMI SEL:<br>{{ all.sel }}<br>SMART INFO:<br>{{ all.smart_info }}</pre>
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            {#            <div role="tabpanel" class="tab-pane fade" id="dropdown1" aria-labelledby="dropdown1-tab">#}
+            {#                <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro#}
+            {#                    fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer,#}
+            {#                    iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony.#}
+            {#                    Leggings gentrify squid 8-bit cred pitchfork. Williamsburg banh mi whatever gluten-free, carles#}
+            {#                    pitchfork biodiesel fixie etsy retro mlkshk vice blog. Scenester cred you probably haven't heard of#}
+            {#                    them, vinyl craft beer blog stumptown. Pitchfork sustainable tofu synth chambray yr.</p>#}
+            {#            </div>#}
+            {#            <div role="tabpanel" class="tab-pane fade" id="dropdown2" aria-labelledby="dropdown2-tab">#}
+            {#                <p>Trust fund seitan letterpress, keytar raw denim keffiyeh etsy art party before they sold out master#}
+            {#                    cleanse gluten-free squid scenester freegan cosby sweater. Fanny pack portland seitan DIY, art party#}
+            {#                    locavore wolf cliche high life echo park Austin. Cred vinyl keffiyeh DIY salvia PBR, banh mi before#}
+            {#                    they sold out farm-to-table VHS viral locavore cosby sweater. Lomo wolf viral, mustache readymade#}
+            {#                    thundercats keffiyeh craft beer marfa ethical. Wolf salvia freegan, sartorial keffiyeh echo park#}
+            {#                    vegan.</p>#}
+            {#            </div>#}
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    <script src="{% static "control/scripts/detail.js" %}"></script>
+{% endblock %}

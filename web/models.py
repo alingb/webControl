@@ -40,3 +40,23 @@ class Host(models.Model):
 
     def __unicode__(self):
         return self.sn
+
+
+KIND_CHOICES = (
+    ('run','run'),
+    ('stop','stop'),
+    ('poweroff','poweroff'),
+    ('bmcLogClear','bmcLogClear'),
+)
+
+
+class Stat(models.Model):
+    ip = models.GenericIPAddressField()
+    sn = models.CharField(max_length=150,default='no date')
+    status = models.CharField(max_length=50,choices=KIND_CHOICES,default='wait')
+    cpu = models.CharField(max_length=150)
+    mem = models.CharField(max_length=150)
+    num = models.CharField(max_length=150)
+    hostname = models.CharField(max_length=150)
+    def __unicode__(self):
+        return "%s(%s)" %(self.status,self.hostname)

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-        <div class="col-lg-3 col-xs-8">
+    <div class="col-lg-3 col-xs-8">
         <!-- small box -->
         <div class="small-box bg-blue">
             <div class="inner">
@@ -11,10 +11,11 @@
             <div class="icon">
                 <i class="ion ion-person-stalker"></i>
             </div>
-            <a href="/control/serverdetail" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <a href="{% url "serverdetail" %}" class="small-box-footer">More info <i
+                    class="fa fa-arrow-circle-right"></i></a>
         </div>
     </div>
-        <div class="col-lg-3 col-xs-8">
+    <div class="col-lg-3 col-xs-8">
         <!-- small box -->
         <div class="small-box bg-green">
             <div class="inner">
@@ -24,7 +25,8 @@
             <div class="icon">
                 <i class="ion ion-person"></i>
             </div>
-            <a href="/control/serverdetail?name=run&status=running" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <a href="{% url "serverdetail" %}?name=run&status=running" class="small-box-footer">More info <i
+                    class="fa fa-arrow-circle-right"></i></a>
         </div>
     </div>
     <div class="col-lg-3 col-xs-8">
@@ -50,10 +52,83 @@
             <div class="icon">
                 <i class="ion ion-locked"></i>
             </div>
-            <a href="/control/serverdetail?name=error&status=erro" class="small-box-footer">More info <i class="fa fa-arrow-circle-right"></i></a>
+            <a href="{% url "serverdetail" %}?name=error&status=erro" class="small-box-footer">More info <i
+                    class="fa fa-arrow-circle-right"></i></a>
         </div>
     </div>
+    <table width="95%" class="table table-hover" align="center" style=" word-break:break-all;">
+        <h4 style="color: #00ca6d; text-align: center">服务器运行状态
+            <br/>[&nbsp;&nbsp;&nbsp;服务器连接数量:&nbsp; {{ count }}&nbsp;&nbsp;&nbsp;]
+            <br/>[{{ dic|upper }}]
+        </h4>
+        <thead>
+        <tr>
+            <th>
+                <h5>ID</h5>
+            </th>
+            <th>
+                <h5>IP</h5>
+            </th>
+            <th>
+                <h5>hostname</h5>
+            </th>
+            <th>
+                <h5>sn</h5>
+            </th>
+            <th>
+                <h5>status</h5>
+            </th>
+            <th>
+                <h5>CPU</h5>
+            </th>
+            <th>
+                <h5>MEM</h5>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for i in form %}
+            <tr>
+                <td>{{ i.num }}</td>
+                <td>
+                    <pre>{{ i.ip }}</pre>
+                </td>
+                <td>{{ i.hostname }}</td>
+                <td>
+                    <pre>{{ i.sn }}</pre>
+                </td>
+                {% if i.status == "stop" or  i.status == "erro" or  i.status == "system halted" %}
+                    <td><h3><span style="color: red; ">{{ i.status|upper }}</span></h3></td>
+                {% elif i.status == "running" %}
+                    <td><span style="color: blue; ">{{ i.status }}</span></td>
+                {% elif i.status == "reload" or i.status == "wait" or i.status == "check" %}
+                    <td><span style="color: green;">{{ i.status }}</span></td>
+                {% else %}
+                    <td><span style="font-size:16px;color: #FF0000; ">{{ i.status|upper }}</span></td>
+                {% endif %}
+                <td>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+                             style="width: {{ i.cpu }};min-width: 2em;">
+                            {{ i.cpu }}
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+                             style="width: {{ i.mem }};min-width: 2em;">
+
+                            {{ i.mem }}
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
 {% endblock %}
 {% block script %}
-<script src="{% static 'control/scripts/index.js' %}"></script>
+    <script src="{% static 'control/scripts/index.js' %}"></script>
 {% endblock %}
