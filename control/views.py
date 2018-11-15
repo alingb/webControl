@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from saltstack import SaltApi
 from django.db.models import Q
 from django.forms import model_to_dict
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from web.models import *
 
@@ -18,14 +18,13 @@ from web.models import *
 
 @login_required
 def index(req):
-    host = Host.objects.all()
-    totalNum = len(host)
-    runNum = len(host.filter(stress_test="running"))
+    totalNum = Host.objects.count()
+    runNum = Host.objects.filter(stress_test="running").count()
     # stopNum = len(Host.objects.filter(Q(stress_test="running") |
     #                                   Q(stress_test__contains="OS off")))
-    offNum = len(host.filter(status__contains="erro"))
-    return render(req, 'index.html', {'totalNum': totalNum, 'runNum': runNum,
-                                             'offNum': offNum})
+    offNum = Host.objects.filter(status__contains="erro").count()
+    return render(req, 'index.html', {'totalNum': totalNum, 'runNum': runNum, 'offNum': offNum})
+
 
 @login_required
 def serverDetail(req):
@@ -34,9 +33,10 @@ def serverDetail(req):
     status = req.GET.get("status")
     return render(req, 'serverdetail.html')
 
+
 @login_required
 def bios(req):
-    bios = {1: "D51B-2U",
+    Bios = {1: "D51B-2U",
             2: "T41S-2U",
             3: "ASR1100",
             4: "RS300-E9-PS4",
@@ -47,11 +47,13 @@ def bios(req):
             9: "N880G2",
             10: "SR205-2"
             }
-    return render(req, 'bios.html', {"bios": bios})
+    return render(req, 'bios.html', {"bios": Bios})
+
 
 @login_required
 def execute(req):
     return render(req, 'execute.html')
+
 
 @login_required
 def serverInfo(request):
@@ -61,6 +63,7 @@ def serverInfo(request):
     state = request.GET.get("state")
     sort = request.GET.get("sort")
     sortOrder = request.GET.get("sortOrder")
+    host = ''
     try:
         if name and status:
             if name == "run":
@@ -69,17 +72,13 @@ def serverInfo(request):
                 host = Host.objects.filter(status__contains=status)
             global name, status
             name, status = '', ''
-        else:
-            host = Host.objects.all()
     except Exception:
-        host = Host.objects.all()
+        pass
+    finally:
+        if not host:
+            host = Host.objects.all()
     if state:
         host = host.filter(stress_test=state)
-    if sort and sortOrder:
-        if sortOrder == "asc":
-            host = host.order_by("{}".format(sort))
-        elif sortOrder == "desc":
-            host = host.order_by("-{}".format(sort))
     if search:
         host = host.filter(Q(sn__contains=search) |
                            Q(sn_1__contains=search) |
@@ -88,7 +87,12 @@ def serverInfo(request):
                            Q(family__contains=search) |
                            Q(status__contains=search) |
                            Q(ip__contains=search))
-    lenth = len(host)
+    lenth = host.count()
+    if sort and sortOrder:
+        if sortOrder == "asc":
+            host = host.order_by("{}".format(sort))
+        elif sortOrder == "desc":
+            host = host.order_by("-{}".format(sort))
     if offset and limit:
         offset = int(offset)
         limit = int(limit)
@@ -98,6 +102,7 @@ def serverInfo(request):
         data.append(model_to_dict(each, fields=['id', 'sn', 'sn_1', 'name', 'name1', 'family',
                                                 'status', 'bios', 'bmc', 'ip', 'stress_test']))
     return HttpResponse(json.dumps({"rows": data, "total": lenth}))
+
 
 @login_required
 def control(req):
@@ -152,6 +157,7 @@ def control(req):
                     Salt.cmd('{}'.format(each['ip']), 'cmd.run', ['{}'.format(cmd)])
                     print each['ip'], i
     return HttpResponse()
+
 
 @login_required
 def infoPaser(req):
