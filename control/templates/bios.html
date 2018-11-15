@@ -33,21 +33,22 @@
                                 <option value="0" data-content="<span class='label labrl-default'>---</span>">---
                                 </option>
                                 {% for each in bios.items %}
-                                <option value="{{ each.0 }}" data-content="<span class='label label-success'>{{ each.1 }}</span>">
-                                    {{ each.1 }}
-                                </option>
+                                    <option value="{{ each.0 }}"
+                                            data-content="<span class='label label-success'>{{ each.1 }}</span>">
+                                        {{ each.1 }}
+                                    </option>
                                 {% endfor %}
                             </select>
                         </div>
                         <div class="form-group" id="bios_name" style="display: none">
                             <label for="bios_name_selectpicker" class="control-label">产品名称:</label>
-                                <select class="selectpicker" id="bios_name_selectpicker" data-style="btn-primary">
-                                    {% for each in name %}
+                            <select class="selectpicker" id="bios_name_selectpicker" data-style="btn-primary">
+                                {% for each in name %}
                                     <option value="{{ each }}"
                                             data-content="<span class='label label-success'>{{ each }}</span>">
                                     </option>
-                                    {% endfor %}
-                                </select>
+                                {% endfor %}
+                            </select>
                         </div>
                     </form>
                 </div>
@@ -63,37 +64,6 @@
         </div>
     </div>
 
-    <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="myModalLabel">请选择BMC信息</h4>
-                </div>
-                <div class="modal-body">
-                    <label>
-                        <select class="selectpicker" id="bmc_selectpicker" data-style="btn-primary">
-                            <option value="UDS1022" data-content="<span class='label label-success'>UDS1022</span>">UDS1022</option>
-                            <option value="2" data-content="<span class='label label-info'>BIOS2</span>">BMC2</option>
-                            <option value="3" data-content="<span class='label label-warning'>BIOS3</span>">BMC3
-                            </option>
-                            <option value="4" data-content="<span class='label label-danger'>BIOS4</span>">BMC4
-                            </option>
-                        </select>
-                    </label>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" id="bmc_close" class="btn btn-default" data-dismiss="modal"><span
-                            class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭
-                    </button>
-                    <button type="button" id="bmc_submit" class="btn btn-primary"><span
-                            class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
@@ -104,31 +74,40 @@
                     <h4 class="modal-title" id="myModalLabel">请输入FRU信息</h4>
                 </div>
                 <div class="modal-body">
-                    <form role="form" enctype='multipart/form-data' id="fru_form" action="/control/mkexec" method="post">
+                    <form role="form" enctype='multipart/form-data' id="fru_form" action="/control/mkexec"
+                          method="post">
                         <div class="box-body">
                             <div class="form-group">
-                                <label for="InputFile">FRU SN</label>
+                                <label for="InputFile" class="control-label">FRU SN:</label>
                                 <input type="file" id="InputFile" name="fru_sn">
                             </div>
                             <div class="form-group">
                                 <input type="hidden" id="data" name="msg">
                             </div>
                             <div class="form-group">
-                                <label>
-                        <select class="selectpicker" name="fru_name" id="bmc_selectpicker" data-style="btn-primary">
-                            <option value="1" data-content="<span class='label label-success'>FRU1</span>">FRU1</option>
-                            <option value="2" data-content="<span class='label label-info'>FRU2</span>">FRU2</option>
-                            <option value="3" data-content="<span class='label label-warning'>FRU3</span>">FRU3
-                            </option>
-                            <option value="4" data-content="<span class='label label-danger'>FRU4</span>">FRU4
-                            </option>
-                        </select>
-                    </label>
+                                <label for="bios_selectpicker" class="control-label">机器名称:</label>
+                                <select class="selectpicker" id="fru_selectpicker" data-style="btn-primary">
+                                    <option value="0" data-content="<span class='label labrl-default'>---</span>">---
+                                    </option>
+                                    {% for each in bios.items %}
+                                        <option value="{{ each.0 }}"
+                                                data-content="<span class='label label-success'>{{ each.1 }}</span>">
+                                            {{ each.1 }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group" id="fru_name" style="display: none">
+                                <label for="fru_name_selectpicker" class="control-label">产品名称:</label>
+                                <select class="selectpicker" id="fru_name_selectpicker" data-style="btn-primary">
+                                    {% for each in name %}
+                                        <option value="{{ each }}"
+                                                data-content="<span class='label label-success'>{{ each }}</span>">
+                                        </option>
+                                    {% endfor %}
+                                </select>
                             </div>
                         </div>
-{#                        <div class="box-footer">#}
-{#                            <button type="submit" id="form_submit" class="btn btn-primary">提交</button>#}
-{#                        </div>#}
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -144,5 +123,5 @@
     </div>
 {% endblock %}
 {% block script %}
-<script src="{% static 'control/scripts/bios.js' %}"></script>
+    <script src="{% static 'control/scripts/bios.js' %}"></script>
 {% endblock %}

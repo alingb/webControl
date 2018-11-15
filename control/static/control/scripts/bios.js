@@ -133,7 +133,7 @@ var FileTableInit = function () {
 function buttonStart() {
     $("#bios_selectpicker").bind("change",function () {
         let dataval = $(this).val();
-        if (dataval == 0 ){
+        if (dataval === 0 ){
             $("#bios_name").hide();
         }
         else {
@@ -156,6 +156,31 @@ function buttonStart() {
             }
         })
     });
+    $("#fru_selectpicker").bind("change",function () {
+        let dataval = $(this).val();
+        if (dataval === 0 ){
+            $("#fru_name").hide();
+        }
+        else {
+            $("#fru_name").show();
+        }
+        $.ajax({
+            type: "post",
+            url: "/control/infopaser",
+            data:{"val": dataval},
+            success:function (data, status) {
+                 if (status === "success") {
+                     data = jQuery.parseJSON(data);
+                     $('#fru_name_selectpicker').find("option").remove();
+                     for (var i = 0; i < data.length; i++) {
+                         $("#fru_name_selectpicker").append($("<option></option>").attr("value", data[i]).attr("data-content", "<span class='label label-info'>" +  data[i] + "</span>").text(data[i])).trigger("change");
+                         $('#fru_name_selectpicker').selectpicker('val', '').trigger("change");
+                         $('#fru_name_selectpicker').selectpicker('refresh');
+                     }
+                 }
+            }
+        })
+    });
     let url = "/control/mkexec";
     $("#bios_button").click(function () {
             let table = $("#bios").bootstrapTable('getSelections');
@@ -164,10 +189,10 @@ function buttonStart() {
             }
             else {
                 $("#myModal").modal();
+                $("#myModal").find("#myModalLabel").text("请选择BIOS信息");
                 $("#bios_submit").click(function () {
                     let name = $("#bios_selectpicker").val();
                     let name1 = $("#bios_name_selectpicker").val();
-                    console.log(name1);
                     $.ajax({
                         type: "post",
                         url: url,
@@ -200,9 +225,11 @@ function buttonStart() {
                 toastr.error("请选择需要执行的设备")
             }
             else {
-                $("#myModal1").modal();
-                $("#bmc_submit").click(function () {
-                    let name = $("#bmc_selectpicker").val();
+                $("#myModal").modal();
+                $("#myModal").find("#myModalLabel").text("请选择BMC信息");
+                $("#bios_submit").click(function () {
+                    let name = $("#bios_selectpicker").val();
+                    let name1 = $("#bios_name_selectpicker").val();
                     $.ajax({
                         type: "post",
                         url: url,
@@ -218,9 +245,9 @@ function buttonStart() {
                             toastr.error('BMC Execute Error!');
                         }
                     });
-                    $("#bmc_button").attr({"disabled": "disabled"});
+                    $("#bios_button").attr({"disabled": "disabled"});
                     toastr.success('BMC Execute sucess!');
-                    $("#bmc_close").click();
+                    $("#bios_close").click();
                     $("#bios").bootstrapTable('refresh');
                 });
             }

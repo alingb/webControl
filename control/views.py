@@ -16,6 +16,9 @@ from web.models import *
 
 # Create your views here.
 
+
+
+
 @login_required
 def index(req):
     totalNum = Host.objects.count()
@@ -57,6 +60,7 @@ def execute(req):
 
 @login_required
 def serverInfo(request):
+    global name, status
     limit = request.GET.get("limit")
     offset = request.GET.get("offset")
     search = request.GET.get("search")
@@ -64,19 +68,14 @@ def serverInfo(request):
     sort = request.GET.get("sort")
     sortOrder = request.GET.get("sortOrder")
     host = ''
-    try:
-        if name and status:
-            if name == "run":
-                host = Host.objects.filter(stress_test=status)
-            elif name == "error":
-                host = Host.objects.filter(status__contains=status)
-            global name, status
-            name, status = '', ''
-    except Exception:
-        pass
-    finally:
-        if not host:
-            host = Host.objects.all()
+    if name and status:
+        if name == "run":
+            host = Host.objects.filter(stress_test=status)
+        elif name == "error":
+            host = Host.objects.filter(status__contains=status)
+        name, status = '', ''
+    if not host:
+        host = Host.objects.all()
     if state:
         host = host.filter(stress_test=state)
     if search:
