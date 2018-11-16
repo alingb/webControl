@@ -17,7 +17,7 @@ var FileTableInit = function () {
     //初始化Table
     oFileTableInit.Init = function () {
         $('#bios').bootstrapTable({
-            url: '/control/serverinfo?state=wait',         //请求后台的URL（*）state=OS off 2018-11-12 15:43
+            url: '/control/serverinfo?state=OS off 2018-11-12 15:43',         //请求后台的URL（*）
             method: 'get',    //请求方式（*）
             toolbar: '#toolbar',                //工具按钮用哪个容器
             striped: true,                      //是否显示行间隔色
@@ -245,7 +245,7 @@ function buttonStart() {
                             toastr.error('BMC Execute Error!');
                         }
                     });
-                    $("#bios_button").attr({"disabled": "disabled"});
+                    $("#bmc_button").attr({"disabled": "disabled"});
                     toastr.success('BMC Execute sucess!');
                     $("#bios_close").click();
                     $("#bios").bootstrapTable('refresh');
