@@ -46,7 +46,7 @@ def index(req):
         dic[i] = num.count(i)
     strs = ""
     for k, v in dic.items():
-        strs += '--"%s"(%s)--' % (k, v)
+        strs += ' "%s"(%s) ' % (k, v)
     return render(req, 'index.html', {'totalNum': totalNum, 'runNum': runNum, 'offNum': offNum, "stopNum": stopNum,
                                       'form': form, 'count': count, 'dic': strs})
 
@@ -136,26 +136,29 @@ def control(req):
     Salt = SaltApi(salt_api)
     state = req.POST.get('state')
     name = req.POST.get('name')
+    name1 = req.POST.get('name1')
     file = req.FILES.get('fru_sn')
+    print name, name1
     if state == "bios":
-        cmd = '/bios/{}/BIOS_lnx64.sh'.format(name)
+        cmd = '/control/{}/BIOS_lnx64.sh {}'.format(name, name1)
         msg = req.POST.get('msg')
         if msg:
             msg = json.loads(msg)
             for each in msg:
                 Salt.cmd('{}'.format(each['ip']), 'cmd.run', ['{}'.format(cmd)])
-                time.sleep(10)
     elif state == "bmc":
-        cmd = '/bmc/{}/BMC_lnx64.sh'.format(name)
+        cmd = '/control/{}/BMC_lnx64.sh {}'.format(name, name1)
         msg = req.POST.get('msg')
         if msg:
             msg = json.loads(msg)
             for each in msg:
+                pass
                 Salt.cmd('{}'.format(each['ip']), 'cmd.run', ['{}'.format(cmd)])
     elif file:
         sn = file.readlines()
         msg = req.POST.get('msg')
         fru_name = req.POST.get('fru_name')
+        fru_p_name = req.POST.get('fru_p_name')
         num = 0
         if msg:
             msg = json.loads(msg)
@@ -163,7 +166,7 @@ def control(req):
                 return HttpResponseBadRequest()
             for each in msg:
                 print each['ip'], sn[num].strip()
-                cmd = 'echo "{}" | /fru/{}/FRU_lnx64.sh'.format(sn[num].strip(), fru_name)
+                cmd = 'echo "{}" | /control/{}/FRU_lnx64.sh {}'.format(sn[num].strip(), fru_p_name, fru_name)
                 num += 1
                 print cmd
                 try:
@@ -191,18 +194,18 @@ def infoPaser(req):
         if val.isdigit():
             val = int(val)
     name_list = {
-        1: ["SunMnet-M3", "UDS1022"],
-        2: ["UDS2000-C", "UDS2000-E", "zhongdianfufu"],
-        3: ['RG-eLog', 'RCP', 'meidian'],
-        4: ['RG-RCP1.0'],
-        5: ['RG-RCM1000-Office', 'RG-RCM1000-Smart', 'RG-RCM1000-Edu'],
-        6: ['RG-ONC-AIO-CTL'],
-        7: ['RG-RCD16000Pro-3D'],
-        8: ['P10S-M-DC'],
-        9: ['tianrongxin'],
-        10: ['RG-RCD6000-Main', 'RG-RCD6000-Office', 'RG-iData-Server', 'RG-RACC5000', 'RG-RCD3000-Office', 'RG-RCD6000EV3', 'haiyunjiexun'],
-        11: ['Meidian'],
-        12: ['DT-G2-U211', 'CZ-2U-K888G4'],
+        "D51B-2U": ["SunMnet-M3", "UDS1022"],
+        "T41S-2U": ["UDS2000-C", "UDS2000-E", "zhongdianfufu"],
+        "ASR1100": ['RG-eLog', 'RCP', 'meidian'],
+        "RS100-E9-PI2": ['RG-RCP1.0'],
+        "RS300-E9-PS4": ['RG-RCM1000-Office', 'RG-RCM1000-Smart', 'RG-RCM1000-Edu'],
+        "RS720Q-E8": ['RG-ONC-AIO-CTL'],
+        "ESC8000G3": ['RG-RCD16000Pro-3D'],
+        "P10S-M-DC": ['P10S-M-DC'],
+        "Z10PA-D8": ['tianrongxin'],
+        "K880G3": ['RG-RCD6000-Main', 'RG-RCD6000-Office', 'RG-iData-Server', 'RG-RACC5000', 'RG-RCD3000-Office', 'RG-RCD6000EV3', 'haiyunjiexun'],
+        "N880G2": ['Meidian'],
+        "SR205-2": ['DT-G2-U211', 'CZ-2U-K888G4'],
     }
     return HttpResponse(json.dumps(name_list[val]))
 

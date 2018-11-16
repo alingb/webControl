@@ -17,7 +17,7 @@ var FileTableInit = function () {
     //初始化Table
     oFileTableInit.Init = function () {
         $('#bios').bootstrapTable({
-            url: '/control/serverinfo?state=OS off 2018-11-12 15:43',         //请求后台的URL（*）
+            url: '/control/serverinfo?state=wait',         //请求后台的URL（*）state=OS off 2018-11-12 15:43
             method: 'get',    //请求方式（*）
             toolbar: '#toolbar',                //工具按钮用哪个容器
             striped: true,                      //是否显示行间隔色
@@ -196,7 +196,7 @@ function buttonStart() {
                     $.ajax({
                         type: "post",
                         url: url,
-                        data: {"state": "bios", "name": name, "msg": JSON.stringify(table)},
+                        data: {"state": "bios", "name": name, "name1": name1, "msg": JSON.stringify(table)},
                         // success: function (data, status) {
                         //     if (status === "success") {
                         //         toastr.success('BIOS Execute sucess!');
@@ -233,7 +233,7 @@ function buttonStart() {
                     $.ajax({
                         type: "post",
                         url: url,
-                        data: {"state": "bmc", "name": name, "msg": JSON.stringify(table)},
+                        data: {"state": "bmc", "name": name, "name1": name1, "msg": JSON.stringify(table)},
                         // success: function (data, status) {
                         //     if (status === "success") {
                         //         toastr.success('BIOS Execute sucess!');

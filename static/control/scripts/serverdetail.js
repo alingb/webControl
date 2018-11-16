@@ -119,7 +119,7 @@ var FileTableInit = function () {
 };
 
 function linkFormatter(value, row, index) {
-            return "<a href='" + value + "' title='单击打开连接' target='_blank'>" + value + "</a>";
+            return "<a href='/control/detail/" + value + "' title='单击打开连接' target='_top'>" + value + "</a>";
         }
 
 function colorFormatter(value) {

@@ -56,11 +56,41 @@
                     class="fa fa-arrow-circle-right"></i></a>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="box box-success box-solid">
+                <div class="box-header with-border">
+                    <h3 class="box-title">服务器连接数量</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    {{ count }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="box box-primary box-solid">
+                <div class="box-header with-border">
+                    <h3 class="box-title">服务器连接统计</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="box-body" style="">
+                    {{ dic|upper }}
+                </div>
+            </div>
+        </div>
+    </div>
+
     <table width="95%" class="table table-hover" align="center" style=" word-break:break-all;">
-        <h4 style="color: #00ca6d; text-align: center">服务器运行状态
-            <br/>[&nbsp;&nbsp;&nbsp;服务器连接数量:&nbsp; {{ count }}&nbsp;&nbsp;&nbsp;]
-            <br/>[{{ dic|upper }}]
-        </h4>
         <thead>
         <tr>
             <th>
