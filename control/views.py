@@ -61,7 +61,7 @@ def serverDetail(req):
 
 @login_required
 def bios(req):
-    Bios = {1: "D51B-2U",
+    Bios = {1: "D51B",
             2: "T41S-2U",
             3: "ASR1100",
             4: "RS100-E9-PI2",
@@ -194,7 +194,7 @@ def infoPaser(req):
         if val.isdigit():
             val = int(val)
     name_list = {
-        "D51B-2U": ["SunMnet-M3", "UDS1022"],
+        "D51B": ["SunMnet-M3", "UDS1022-G"],
         "T41S-2U": ["UDS2000-C", "UDS2000-E", "zhongdianfufu"],
         "ASR1100": ['RG-eLog', 'RCP', 'meidian'],
         "RS100-E9-PI2": ['RG-RCP1.0'],
