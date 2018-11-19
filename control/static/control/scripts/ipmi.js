@@ -17,7 +17,7 @@ var FileTableInit = function () {
     //初始化Table
     oFileTableInit.Init = function () {
         $('#ipmi').bootstrapTable({
-            url: '/control/serverinfo?state=running',         //请求后台的URL（*）
+            url: '/control/serverinfo?state=wait',         //请求后台的URL（*）
             method: 'get',    //请求方式（*）
             toolbar: '#toolbar',                //工具按钮用哪个容器
             striped: true,                      //是否显示行间隔色
@@ -109,7 +109,7 @@ var FileTableInit = function () {
                 title: '运行状态',
                 sortable: true
             },{
-                field: 'exec_state',
+                field: 'cmd_state',
                 title: '执行状态',
                 sortable: true
             },],

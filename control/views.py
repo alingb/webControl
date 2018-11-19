@@ -147,6 +147,27 @@ def serverInfo(request):
     return HttpResponse(json.dumps({"rows": data, "total": lenth}))
 
 
+def checkStat(Salt, each, cmd, info):
+    try:
+        host = Host.objects.get(sn=each['sn'], sn_1=each['sn_1'])
+    except Exception:
+        return HttpResponseBadRequest()
+    host.change_stat = "{}指令下发中……".format(info)
+    host.save()
+    Salt.cmd('{}'.format(each['ip']), 'cmd.run', ['{}'.format(cmd)])
+    host.change_stat = "{}指令执行中……".format(info)
+    host.save()
+    while 1:
+        data = Salt.cmd('{}'.format(each['ip']), 'cmd.run', ['{}'.format('ps aux | grep {}_lnx64 | grep -v grep'.format(info))])
+        msg = data[each['ip']]
+        if msg:
+            host.change_stat = "{}客制化完成".format(info)
+            host.save()
+            break
+        else:
+            time.sleep(10)
+            continue
+
 @login_required
 def control(req):
     salt_api = "https://127.0.0.1:8000/"
@@ -162,15 +183,14 @@ def control(req):
         if msg:
             msg = json.loads(msg)
             for each in msg:
-                Salt.cmd('{}'.format(each['ip']), 'cmd.run', ['{}'.format(cmd)])
+                checkStat(Salt, each, cmd, 'BIOS')
     elif state == "bmc":
         cmd = '/control/{}/BMC_lnx64.sh {}'.format(name, name1)
         msg = req.POST.get('msg')
         if msg:
             msg = json.loads(msg)
             for each in msg:
-                pass
-                Salt.cmd('{}'.format(each['ip']), 'cmd.run', ['{}'.format(cmd)])
+                checkStat(Salt, each, cmd, 'BMC')
     elif file:
         sn = file.readlines()
         msg = req.POST.get('msg')
@@ -185,9 +205,8 @@ def control(req):
                 print each['ip'], sn[num].strip()
                 cmd = 'echo "{}" | /control/{}/FRU_lnx64.sh {}'.format(sn[num].strip(), fru_p_name, fru_name)
                 num += 1
-                print cmd
                 try:
-                    Salt.cmd('{}'.format(each['ip']), 'cmd.run', ['{}'.format(cmd)])
+                    checkStat(Salt, each, cmd, 'FRU')
                 except Exception:
                     pass
         return HttpResponseRedirect('/control/bios')
@@ -199,8 +218,25 @@ def control(req):
             msg = json.loads(msg)
             for each in msg:
                 for i in info:
-                    Salt.cmd('{}'.format(each['ip']), 'service.start', ['{}'.format(i.lower())])
-                    print each['ip'], i
+                    try:
+                        host = Host.objects.get(sn=each['sn'], sn_1=each['sn_1'])
+                    except Exception:
+                        return HttpResponseBadRequest()
+                    host.cmd_stat = "指令下发中……"
+                    host.save()
+                    Salt.cmd('{}'.format(each['ip']), 'service.start', ['trusme-{}'.format(i.lower())])
+                    host.cmd_stat = "指令执行中……"
+                    host.save()
+                    while 1:
+                        data = Salt.cmd('{}'.format(each['ip']), 'service.status', ['trusme-{}'.format(i.lower())])
+                        msg = data[each['ip']]
+                        if msg:
+                            host.cmd = "运行成功"
+                            host.save()
+                            break
+                        else:
+                            time.sleep(10)
+                            continue
     return HttpResponse()
 
 
