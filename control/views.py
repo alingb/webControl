@@ -142,7 +142,7 @@ def serverInfo(request):
         host = host[offset:offset + limit]
     data = []
     for each in host:
-        data.append(model_to_dict(each, fields=['id', 'sn', 'sn_1', 'name', 'name1', 'family',
+        data.append(model_to_dict(each, fields=['id', 'sn', 'sn_1', 'name', 'name1', 'family', 'change_stat', 'cmd_stat'
                                                 'status', 'bios', 'bmc', 'ip', 'stress_test']))
     return HttpResponse(json.dumps({"rows": data, "total": lenth}))
 

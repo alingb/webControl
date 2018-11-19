@@ -109,7 +109,7 @@ var FileTableInit = function () {
                 title: '运行状态',
                 sortable: true
             },{
-                field: 'cmd_state',
+                field: 'cmd_stat',
                 title: '执行状态',
                 sortable: true
             },],
