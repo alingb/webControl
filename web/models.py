@@ -5,6 +5,7 @@ from django.db import models
 
 # Create your models here.
 
+
 class Host(models.Model):
     id = models.AutoField(primary_key=True)
     sn = models.CharField(max_length=250)
@@ -33,6 +34,8 @@ class Host(models.Model):
     fru = models.TextField()
     smart_info = models.TextField(blank=True)
     enclosure = models.FileField('breakin', blank=True)
+    change_stat = models.CharField(max_length=255, blank=True, default="-")
+    cmd_stat = models.CharField(max_length=255, blank=True, default="-")
 
     class Meta:
         verbose_name_plural = u'老化测试系统'
@@ -43,20 +46,21 @@ class Host(models.Model):
 
 
 KIND_CHOICES = (
-    ('run','run'),
-    ('stop','stop'),
-    ('poweroff','poweroff'),
-    ('bmcLogClear','bmcLogClear'),
+    ('run', 'run'),
+    ('stop', 'stop'),
+    ('poweroff', 'poweroff'),
+    ('bmcLogClear', 'bmcLogClear'),
 )
 
 
 class Stat(models.Model):
     ip = models.GenericIPAddressField()
-    sn = models.CharField(max_length=150,default='no date')
-    status = models.CharField(max_length=50,choices=KIND_CHOICES,default='wait')
+    sn = models.CharField(max_length=150, default='no date')
+    status = models.CharField(max_length=50, choices=KIND_CHOICES, default='wait')
     cpu = models.CharField(max_length=150)
     mem = models.CharField(max_length=150)
     num = models.CharField(max_length=150)
     hostname = models.CharField(max_length=150)
+
     def __unicode__(self):
-        return "%s(%s)" %(self.status,self.hostname)
+        return "%s(%s)" % (self.status, self.hostname)

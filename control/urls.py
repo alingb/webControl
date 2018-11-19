@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'serverinfo', serverInfo, name='serverinfo'),
     url(r'mkexec', control, name="control"),
     url(r'infopaser', infoPaser, name="infopaser"),
+    url(r'msgParsePost', msgParsePost, name="msgParsePost"),
 ]

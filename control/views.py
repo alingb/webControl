@@ -5,6 +5,7 @@ import json
 import time
 
 from django.contrib.auth.decorators import login_required
+from django.core.files import File
 
 from saltstack import SaltApi
 from django.db.models import Q
@@ -21,34 +22,50 @@ from web.models import *
 
 @login_required
 def index(req):
-    totalNum = Host.objects.count()
-    runNum = Host.objects.filter(stress_test="running").count()
-    stopNum = Host.objects.filter(Q(stress_test="reload")).count()
-    offNum = Host.objects.filter(status__contains="erro").count()
-    form = Stat.objects.all()
-    count = form.count()
-    form = form.order_by('-status', 'hostname')
-    a = 1
-    for i in form:
-        b = i
-        b.num = a
-        a += 1
-        b.save()
-    num = []
-    for i in form:
-        if 'OS off' in i.status:
-            num.append(i.status[:-6])
-        else:
-            num.append(i.status)
-    dic = {}
-    data = set(num)
-    for i in data:
-        dic[i] = num.count(i)
-    strs = ""
-    for k, v in dic.items():
-        strs += ' "%s"(%s) ' % (k, v)
-    return render(req, 'index.html', {'totalNum': totalNum, 'runNum': runNum, 'offNum': offNum, "stopNum": stopNum,
-                                      'form': form, 'count': count, 'dic': strs})
+    if req.method == "POST":
+        info = json.loads(req.body)
+        ip = info['ip']
+        try:
+            stat = Stat.objects.get(ip=ip)
+        except Exception:
+            stat = Stat()
+        stat.status = info['status']
+        stat.ip = info['ip']
+        stat.sn = info['sn']
+        stat.cpu = info['cpu']
+        stat.mem = info['mem']
+        stat.hostname = info['hostname']
+        stat.save()
+        return HttpResponse()
+    else:
+        totalNum = Host.objects.exclude(stress_test__contains="OS off").count()
+        runNum = Host.objects.filter(stress_test="running").count()
+        stopNum = Host.objects.filter(Q(stress_test="reload")).count()
+        offNum = Host.objects.filter(status__contains="erro").count()
+        form = Stat.objects.all()
+        count = form.count()
+        form = form.order_by('-status', 'hostname')
+        a = 1
+        for i in form:
+            b = i
+            b.num = a
+            a += 1
+            b.save()
+        num = []
+        for i in form:
+            if 'OS off' in i.status:
+                num.append(i.status[:-6])
+            else:
+                num.append(i.status)
+        dic = {}
+        data = set(num)
+        for i in data:
+            dic[i] = num.count(i)
+        strs = ""
+        for k, v in dic.items():
+            strs += '"%s"(%s)___' % (k, v)
+        return render(req, 'index.html', {'totalNum': totalNum, 'runNum': runNum, 'offNum': offNum, "stopNum": stopNum,
+                                          'form': form, 'count': count, 'dic': strs})
 
 
 @login_required
@@ -233,3 +250,48 @@ def controlDeatil(req, ID):
             info = message.split(ALL_LIST[i])[0]
             dic[ALL_LIST[i].replace(' ', '_')] = info.split(':')[1]
     return render(req, 'detail.html', {'form': dic, 'all': form})
+
+
+def msgParsePost(req):
+    if req.POST:
+        info = json.loads(req.body)
+        sn = info['sn']
+        sn_1 = info['sn_1']
+        try:
+            host = Host.objects.get(sn=sn, sn_1=sn_1)
+        except Exception:
+            host = Host()
+        host.sn = info['sn']
+        host.sn_1 = info['sn_1']
+        host.status = info['status']
+        host.time = info['time']
+        host.boot_time = info['boot_time']
+        host.name = info['name']
+        host.name1 = info['name1']
+        host.family = info['family']
+        host.cpu = info['cpu']
+        host.memory = info['memory']
+        host.disk = info['disk']
+        host.disk_num = info['disk_num']
+        host.hostname = info['hostname']
+        host.stress_test = info['stress_test']
+        host.network = info['network']
+        host.mac = info['mac']
+        host.mac_addr = info['mac_addr']
+        host.raid = info['raid']
+        host.bios = info['bios']
+        host.bmc = info['bmc']
+        host.message = info['message']
+        host.sel = info['sel']
+        host.fru = info['fru']
+        if len(info['ip'].strip().split('.')) == 4:
+            host.ip = info['ip']
+        if info['smart_info']:
+            host.smart_info = info['smart_info']
+        try:
+            host.enclosure = File(info['enclosure'])
+        except Exception:
+            pass
+        host.save()
+    return HttpResponse('ok')
+
