@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+import datetime
 import json
 import time
 
@@ -13,6 +14,7 @@ from django.forms import model_to_dict
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render
 from web.models import *
+from .models import *
 
 
 # Create your views here.
@@ -142,27 +144,52 @@ def serverInfo(request):
         host = host[offset:offset + limit]
     data = []
     for each in host:
-        data.append(model_to_dict(each, fields=['id', 'sn', 'sn_1', 'name', 'name1', 'family', 'change_stat', 'cmd_stat'
-                                                'status', 'bios', 'bmc', 'ip', 'stress_test']))
+        data.append(
+            model_to_dict(each, fields=['id', 'sn', 'sn_1', 'name', 'name1', 'family', 'change_stat', 'cmd_stat',
+                                        'status', 'bios', 'bmc', 'ip', 'stress_test']))
     return HttpResponse(json.dumps({"rows": data, "total": lenth}))
 
 
-def checkStat(Salt, each, cmd, info):
+def msgSave(userexec, username, msg):
+    now_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    userexec.username = username
+    userexec.addTime = now_time
+    userexec.msg = msg
+    userexec.save()
+
+
+def checkStat(Salt, each, cmd, info, username, name, name1):
+    userexec = UserExecMsg()
+    msg = "对设备号(SN:{0},SN_1:{1})进行刷{2}操作，{2}的选择为(机器名称:{3} 产品名称:{4})".format(each['sn'], each['sn_1'], info, name, name1)
+    msgSave(userexec, username, msg)
     try:
         host = Host.objects.get(sn=each['sn'], sn_1=each['sn_1'])
     except Exception:
         return HttpResponseBadRequest()
     host.change_stat = "{}指令下发中……".format(info)
     host.save()
-    Salt.cmd('{}'.format(each['ip']), 'cmd.run', ['{}'.format(cmd)])
-    host.change_stat = "{}指令执行中……".format(info)
-    host.save()
+    Salt.cmd('{}'.format(each['ip']), 'cmd.run', [cmd])
+    time.sleep(5)
+    cmd1 = 'ps aux | grep {}_lnx64 | grep -v grep'.format(info)
+    data = Salt.cmd('{}'.format(each['ip']), 'cmd.run', [cmd1])
+    msg = data['ip']
+    if msg:
+        host.change_stat = "{}指令执行中……".format(info)
+        host.save()
+    else:
+        host.change_stat = "{}指令执行失败".format(info)
+        msg = "机器名称为:{},产品名称为:{}的设备刷新{}版本失败".format(name, name1, info)
+        msgSave(userexec, username, msg)
+        host.save()
+        exit()
     while 1:
-        data = Salt.cmd('{}'.format(each['ip']), 'cmd.run', ['{}'.format('ps aux | grep {}_lnx64 | grep -v grep'.format(info))])
+        data = Salt.cmd('{}'.format(each['ip']), 'cmd.run', [cmd])
         msg = data[each['ip']]
         if msg:
             host.change_stat = "{}客制化完成".format(info)
             host.save()
+            msg = "机器名称为:{},产品名称为:{}的设备刷新{}版本成功".format(name, name1, info)
+            msgSave(userexec, username, msg)
             break
         else:
             time.sleep(10)
@@ -170,28 +197,31 @@ def checkStat(Salt, each, cmd, info):
 
 @login_required
 def control(req):
+    userexec = UserExecMsg()
+    username = req.user.username
     salt_api = "https://127.0.0.1:8000/"
     Salt = SaltApi(salt_api)
     state = req.POST.get('state')
     name = req.POST.get('name')
     name1 = req.POST.get('name1')
     file = req.FILES.get('fru_sn')
-    print name, name1
     if state == "bios":
         cmd = '/control/{}/BIOS_lnx64.sh {}'.format(name, name1)
         msg = req.POST.get('msg')
         if msg:
             msg = json.loads(msg)
             for each in msg:
-                checkStat(Salt, each, cmd, 'BIOS')
+                checkStat(Salt, each, cmd, 'BIOS', username, name, name1)
     elif state == "bmc":
+        print req.user.username
         cmd = '/control/{}/BMC_lnx64.sh {}'.format(name, name1)
         msg = req.POST.get('msg')
         if msg:
             msg = json.loads(msg)
             for each in msg:
-                checkStat(Salt, each, cmd, 'BMC')
+                checkStat(Salt, each, cmd, 'BMC', username, name, name1)
     elif file:
+        print req.user.username
         sn = file.readlines()
         msg = req.POST.get('msg')
         fru_name = req.POST.get('fru_name')
@@ -211,6 +241,7 @@ def control(req):
                     pass
         return HttpResponseRedirect('/control/bios')
     elif state == "run":
+        print req.user.username
         msg = req.POST.get('msg')
         info = req.POST.get('info')
         if info and msg:
@@ -227,12 +258,16 @@ def control(req):
                     Salt.cmd('{}'.format(each['ip']), 'service.start', ['trusme-{}'.format(i.lower())])
                     host.cmd_stat = "指令执行中……"
                     host.save()
+                    msg = "设备名称为sn:{},sn_1:{}执行{}操作".format(each['sn'], each['sn_1'], i)
+                    msgSave(userexec, username, msg)
                     while 1:
                         data = Salt.cmd('{}'.format(each['ip']), 'service.status', ['trusme-{}'.format(i.lower())])
                         msg = data[each['ip']]
                         if msg:
-                            host.cmd = "运行成功"
+                            host.cmd_stat = "运行成功"
                             host.save()
+                            msg = "设备名称为sn:{},sn_1:{}执行{}操作成功".format(each['sn'], each['sn_1'], i)
+                            msgSave(userexec, username, msg)
                             break
                         else:
                             time.sleep(10)

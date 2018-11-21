@@ -90,9 +90,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'cmdb',
-        'USER': 'trusme',
-        'PASSWORD': '6286280300',
-        'HOST': '192.168.1.57',
+        'USER': 'root',
+        'PASSWORD': '123456',
+        'HOST': '192.168.2.199',
         'PORT': '3306'
     }
 }

@@ -4,6 +4,9 @@ $(document).ready(function () {
     oFileTable.Init();
     addclass();
     buttonStart();
+    setInterval(function() {
+        $("#bios").bootstrapTable('refresh');
+}, 20000);
 });
 
 
