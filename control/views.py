@@ -168,32 +168,30 @@ def checkStat(Salt, each, cmd, info, username, name, name1):
         return HttpResponseBadRequest()
     host.change_stat = "{}指令下发中……".format(info)
     host.save()
-    Salt.cmd('{}'.format(each['ip']), 'cmd.run', [cmd])
-    time.sleep(5)
-    cmd1 = 'ps aux | grep {}_lnx64 | grep -v grep'.format(info)
-    data = Salt.cmd('{}'.format(each['ip']), 'cmd.run', [cmd1])
-    msg = data['ip']
-    if msg:
+    time.sleep(1)
+    try:
         host.change_stat = "{}指令执行中……".format(info)
         host.save()
-    else:
+        Salt.salt_async_command('{}'.format(each['ip']), 'cmd.run', [cmd])
+        cmd1 = 'ps aux | grep {}_lnx64 | grep -v grep'.format(info)
+        while 1:
+            data = Salt.cmd('{}'.format(each['ip']), 'cmd.run', [cmd1])
+            msg = data[each['ip']]
+            if msg:
+                time.sleep(10)
+                continue
+            else:
+                host.change_stat = "{}客制化完成".format(info)
+                host.save()
+                msg = "机器名称为:{},产品名称为:{}的设备刷新{}版本成功".format(name, name1, info)
+                msgSave(username, msg)
+                break
+    except Exception:
         host.change_stat = "{}指令执行失败".format(info)
         msg = "机器名称为:{},产品名称为:{}的设备刷新{}版本失败".format(name, name1, info)
         msgSave(username, msg)
         host.save()
-        exit()
-    while 1:
-        data = Salt.cmd('{}'.format(each['ip']), 'cmd.run', [cmd])
-        msg = data[each['ip']]
-        if msg:
-            host.change_stat = "{}客制化完成".format(info)
-            host.save()
-            msg = "机器名称为:{},产品名称为:{}的设备刷新{}版本成功".format(name, name1, info)
-            msgSave(username, msg)
-            break
-        else:
-            time.sleep(10)
-            continue
+
 
 @login_required
 def control(req):
@@ -250,24 +248,29 @@ def control(req):
                         return HttpResponseBadRequest()
                     host.cmd_stat = "指令下发中……"
                     host.save()
-                    Salt.cmd('{}'.format(each['ip']), 'service.start', ['trusme-{}'.format(i.lower())])
-                    host.cmd_stat = "指令执行中……"
-                    host.save()
-                    time.sleep(1)
-                    msg = "设备名称为sn:{},sn_1:{}执行{}操作".format(each['sn'], each['sn_1'], i)
-                    msgSave(username, msg)
-                    while 1:
-                        data = Salt.cmd('{}'.format(each['ip']), 'service.status', ['trusme-{}'.format(i.lower())])
-                        msg = data[each['ip']]
-                        if msg:
-                            host.cmd_stat = "运行成功"
-                            host.save()
-                            msg = "设备名称为sn:{},sn_1:{}执行{}操作成功".format(each['sn'], each['sn_1'], i)
-                            msgSave(username, msg)
-                            break
-                        else:
-                            time.sleep(10)
-                            continue
+                    try:
+                        host.cmd_stat = "指令执行中……"
+                        host.save()
+                        Salt.salt_async_command('{}'.format(each['ip']), 'service.start', ['trusme-{}'.format(i.lower())])
+                        msg = "设备名称为sn:{},sn_1:{}执行{}操作".format(each['sn'], each['sn_1'], i)
+                        msgSave(username, msg)
+                        while 1:
+                            data = Salt.cmd('{}'.format(each['ip']), 'service.status', ['trusme-{}'.format(i.lower())])
+                            msg = data[each['ip']]
+                            if msg:
+                                host.cmd_stat = "运行成功"
+                                host.save()
+                                msg = "设备名称为sn:{},sn_1:{}执行{}操作成功".format(each['sn'], each['sn_1'], i)
+                                msgSave(username, msg)
+                                break
+                            else:
+                                time.sleep(10)
+                                continue
+                    except Exception:
+                        host.cmd_stat = "指令执行失败"
+                        host.save()
+                        msg = "设备名称为sn:{},sn_1:{}执行{}操作失败".format(each['sn'], each['sn_1'], i)
+                        msgSave(username, msg)
     return HttpResponse()
 
 
