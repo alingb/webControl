@@ -5,10 +5,7 @@
 # @FILE:stat.py
 # @Author:ytym00
 """
-
-# !/usr/bin/python
 import re
-import shlex
 from subprocess import Popen, PIPE
 import requests
 import json

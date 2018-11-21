@@ -321,6 +321,7 @@ def controlDeatil(req, ID):
     return render(req, 'detail.html', {'form': dic, 'all': form})
 
 
+@login_required()
 def msgParsePost(req):
     if req.method == "POST":
         info = json.loads(req.body)
