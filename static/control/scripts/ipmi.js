@@ -52,10 +52,10 @@ var FileTableInit = function () {
                 if (row.cmd_stat.indexOf("成功") !== -1) {
                     strclass = 'success';//还有一个active
                 }
-                else if (row.cmd_stat.indexOf("执行中")) {
+                else if (row.cmd_stat.indexOf("执行中") !== -1) {
                     strclass = 'info';
                 }
-                else if (row.cmd_stat.indexOf("失败")) {
+                else if (row.cmd_stat.indexOf("失败") !== -1 ) {
                     strclass = 'danger';
                 }
                 else {

@@ -34,8 +34,8 @@ class Host(models.Model):
     fru = models.TextField()
     smart_info = models.TextField(blank=True)
     enclosure = models.FileField('breakin', blank=True)
-    change_stat = models.CharField(max_length=255, blank=True, default="-")
-    cmd_stat = models.CharField(max_length=255, blank=True, default="-")
+    change_stat = models.CharField(max_length=255, blank=True, default="-", null=True)
+    cmd_stat = models.CharField(max_length=255, blank=True, default="-", null=True)
 
     class Meta:
         verbose_name_plural = u'老化测试系统'
