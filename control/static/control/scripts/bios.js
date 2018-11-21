@@ -53,7 +53,7 @@ var FileTableInit = function () {
                 //这里有5个取值代表5中颜色['active', 'success', 'info', 'warning', 'danger'];
                 var strclass = "";
 
-                if (row.change_stat.indexOf("成功") !== -1) {
+                if (row.change_stat.indexOf("完成") !== -1) {
                     strclass = 'success';//还有一个active
                 }
                 else if (row.change_stat.indexOf("执行中") !== -1) {
