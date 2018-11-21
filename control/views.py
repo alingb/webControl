@@ -150,7 +150,8 @@ def serverInfo(request):
     return HttpResponse(json.dumps({"rows": data, "total": lenth}))
 
 
-def msgSave(userexec, username, msg):
+def msgSave(username, msg):
+    userexec = UserExecMsg()
     now_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     userexec.username = username
     userexec.addTime = now_time
@@ -159,9 +160,8 @@ def msgSave(userexec, username, msg):
 
 
 def checkStat(Salt, each, cmd, info, username, name, name1):
-    userexec = UserExecMsg()
     msg = "对设备号(SN:{0},SN_1:{1})进行刷{2}操作，{2}的选择为(机器名称:{3} 产品名称:{4})".format(each['sn'], each['sn_1'], info, name, name1)
-    msgSave(userexec, username, msg)
+    msgSave(username, msg)
     try:
         host = Host.objects.get(sn=each['sn'], sn_1=each['sn_1'])
     except Exception:
@@ -179,7 +179,7 @@ def checkStat(Salt, each, cmd, info, username, name, name1):
     else:
         host.change_stat = "{}指令执行失败".format(info)
         msg = "机器名称为:{},产品名称为:{}的设备刷新{}版本失败".format(name, name1, info)
-        msgSave(userexec, username, msg)
+        msgSave(username, msg)
         host.save()
         exit()
     while 1:
@@ -189,7 +189,7 @@ def checkStat(Salt, each, cmd, info, username, name, name1):
             host.change_stat = "{}客制化完成".format(info)
             host.save()
             msg = "机器名称为:{},产品名称为:{}的设备刷新{}版本成功".format(name, name1, info)
-            msgSave(userexec, username, msg)
+            msgSave(username, msg)
             break
         else:
             time.sleep(10)
@@ -197,7 +197,6 @@ def checkStat(Salt, each, cmd, info, username, name, name1):
 
 @login_required
 def control(req):
-    userexec = UserExecMsg()
     username = req.user.username
     salt_api = "https://127.0.0.1:8000/"
     Salt = SaltApi(salt_api)
@@ -213,7 +212,6 @@ def control(req):
             for each in msg:
                 checkStat(Salt, each, cmd, 'BIOS', username, name, name1)
     elif state == "bmc":
-        print req.user.username
         cmd = '/control/{}/BMC_lnx64.sh {}'.format(name, name1)
         msg = req.POST.get('msg')
         if msg:
@@ -221,7 +219,6 @@ def control(req):
             for each in msg:
                 checkStat(Salt, each, cmd, 'BMC', username, name, name1)
     elif file:
-        print req.user.username
         sn = file.readlines()
         msg = req.POST.get('msg')
         fru_name = req.POST.get('fru_name')
@@ -236,7 +233,7 @@ def control(req):
                 cmd = 'echo "{}" | /control/{}/FRU_lnx64.sh {}'.format(sn[num].strip(), fru_p_name, fru_name)
                 num += 1
                 try:
-                    checkStat(Salt, each, cmd, 'FRU')
+                    checkStat(Salt, each, cmd, 'FRU', username, name, name1)
                 except Exception:
                     pass
         return HttpResponseRedirect('/control/bios')
@@ -258,8 +255,9 @@ def control(req):
                     Salt.cmd('{}'.format(each['ip']), 'service.start', ['trusme-{}'.format(i.lower())])
                     host.cmd_stat = "指令执行中……"
                     host.save()
+                    time.sleep(1)
                     msg = "设备名称为sn:{},sn_1:{}执行{}操作".format(each['sn'], each['sn_1'], i)
-                    msgSave(userexec, username, msg)
+                    msgSave(username, msg)
                     while 1:
                         data = Salt.cmd('{}'.format(each['ip']), 'service.status', ['trusme-{}'.format(i.lower())])
                         msg = data[each['ip']]
@@ -267,7 +265,7 @@ def control(req):
                             host.cmd_stat = "运行成功"
                             host.save()
                             msg = "设备名称为sn:{},sn_1:{}执行{}操作成功".format(each['sn'], each['sn_1'], i)
-                            msgSave(userexec, username, msg)
+                            msgSave(username, msg)
                             break
                         else:
                             time.sleep(10)
@@ -324,7 +322,7 @@ def controlDeatil(req, ID):
 
 
 def msgParsePost(req):
-    if req.POST:
+    if req.method == "POST":
         info = json.loads(req.body)
         sn = info['sn']
         sn_1 = info['sn_1']

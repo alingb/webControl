@@ -964,9 +964,7 @@ def runMain(msg):
 def sedMessage(msg):
     url = "http://172.16.1.1/login/"
     UA = "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.13 Safari/537.36"
-    header = {"User-Agent": UA,
-              "Referer": "http://www.v2ex.com/signin"
-              }
+    header = {"User-Agent": UA,}
     session = requests.Session()
     postData = {'username': 'admin',
                 'passwd': 'trusme123',
@@ -976,8 +974,7 @@ def sedMessage(msg):
                  headers=header)
     data = json.dumps(msg)
     try:
-        p = session.post('http://192.168.1.57/web/collect/', data=data, headers=header)
-        print p.status_code
+        p = session.post('http://172.16.1.1/control/msgParsePost', data=data, headers=header)
     finally:
         pass
 
