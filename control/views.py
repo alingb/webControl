@@ -229,7 +229,6 @@ def control(req):
             if len(msg) != len(sn):
                 return HttpResponseBadRequest()
             for each in msg:
-                print each['ip'], sn[num].strip()
                 cmd = 'echo "{}" | /control/{}/FRU_lnx64.sh {}'.format(sn[num].strip(), fru_p_name, fru_name)
                 num += 1
                 try:
@@ -238,7 +237,6 @@ def control(req):
                     pass
         return HttpResponseRedirect('/control/bios')
     elif state == "run":
-        print req.user.username
         msg = req.POST.get('msg')
         info = req.POST.get('info')
         if info and msg:
