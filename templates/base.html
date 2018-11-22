@@ -96,9 +96,9 @@
                 {% block link2 %}
                     <li id="link2"><a href="{% url "serverdetail" %}"><i class="fa fa-user"></i> <span>机器列表</span></a></li>
                 {% endblock link2 %}
-                {#                {% block link3 %}#}
-                {#                    <li><a href="#"><i class="fa fa-wrench"></i> <span>算力查看</span></a></li>#}
-                {#                {% endblock %}#}
+                {% block link3 %}
+                    <li><a href="{% url "userlog" %}"><i class="fa fa-wrench"></i> <span>操作日志</span></a></li>
+                {% endblock %}
                 {% block treeview %}
                     <li id='tv' class="treeview">
                         <a href="#"><i class="fa fa-calendar"></i> <span>操作中心</span>

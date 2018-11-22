@@ -25,4 +25,5 @@ urlpatterns = [
     # url(r'signup/', signup, name="sigup"),
     url(r'^$', index, name="index"),
     url(r'control/', include('control.urls')),
+    url(r'web/', include('web.urls')),
 ]
