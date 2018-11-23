@@ -2,48 +2,62 @@
 # _*_encoding:utf-8_*_
 """
 # @TIME:2018/11/19 15:54
-# @FILE:stat.py
+# @FILE:runStat.py
 # @Author:ytym00
 """
 import re
-from subprocess import Popen, PIPE
+from subprocess import Popen, PIPE, STDOUT
 import requests
 import json
 import time
 import MySQLdb
 
 
-def sn():
-    cmd = '/usr/sbin/dmidecode'
-    info = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)
+def execCommand(cmd, timeout=1):
+    info = Popen(cmd, stdout=PIPE, stderr=STDOUT, shell=True)
+    t_start = time.time()
+    while 1:
+        if info.poll() is not None:
+            break
+        seconds = time.time() - t_start
+        if timeout and seconds > timeout:
+            info.terminate()
+            return ''
+        time.sleep(0.1)
     info = info.stdout.read()
-    n = 0
-    dmi_info = ''
-    for i in info.split('\n'):
-        if i.startswith('SMBIOS'):
-            n += 1
-        if n < 2:
-            dmi_info += i + "\n"
-    if n > 1:
-        info = dmi_info
-    sn_info = re.findall(r'Serial Number:\s+(.*)\s*', info, re.M)
+    if "SMBIOS" in info:
+        msg, count = '', 0
+        for i in info.strip().split('\n'):
+            if i.startswith('SMBIOS'):
+                count += 1
+            if count < 2:
+                msg += "{}\n".format(i)
+        if count > 1:
+            info = msg
+        return info.strip()
+    else:
+        return info
 
+
+def productSN():
+    cmd = '/usr/sbin/dmidecode'
+    info = execCommand(cmd)
+    sn_info = re.findall(r'Serial Number:\s+(.*)\s*', info, re.M)
     if len(sn_info[:2]) == 2:
         sn = sn_info[0].strip()
         sn_1 = sn_info[1].strip()
     else:
         sn = sn_info[0].strip()
         sn_1 = ''
-
     return {'sn': str([sn, sn_1]), 'sn_1': str(sn_1.strip()).strip()}
 
 
-def ip():
-    info = Popen(['/sbin/ifconfig'], stdout=PIPE, stderr=PIPE, shell=True)
-    info = info.stdout.read().split('\n\n')
+def serverIP():
+    cmd = '/sbin/ifconfig'
+    info = execCommand(cmd).split('\n\n')
     if not info:
-        info = Popen(['/usr/sbin/ifconfig'], stdout=PIPE, stderr=PIPE, shell=True)
-        info = info.stdout.read().split('\n\n')
+        cmd = '/usr/sbin/ifconfig'
+        info = execCommand(cmd).split('\n\n')
     info = '\n'.join([i for i in info if i and not i.startswith('lo') and not i.startswith('vir')])
     ip_gen = re.compile(r'inet addr:(172.16.\d.\d{1,3})', re.M)
     ip = ip_gen.search(info)
@@ -55,21 +69,21 @@ def ip():
     return {'ip': ip}
 
 
-def info():
+def cpuInfo():
     with open('/proc/stat') as fd:
         info = fd.readline().split()[1:]
     return info
 
 
 def getInfo():
-    data = info()
+    data = cpuInfo()
     total = 0
     for i in data:
         total += long(i)
     return total, long(data[3])
 
 
-def mem():
+def productMemInfo():
     global total_mem, free_mem
     with open('/proc/meminfo') as fd:
         info = fd.readlines()
@@ -84,7 +98,7 @@ def mem():
     return {'mem': '%.2f%%' % mem}
 
 
-def cpu():
+def productCpuInfo():
     total, ide = getInfo()
     time.sleep(2)
     total1, ide1 = getInfo()
@@ -96,14 +110,14 @@ def cpu():
 
 
 def hostName():
-    info = Popen('hostname', stdout=PIPE, stderr=PIPE, shell=True)
-    hostname = info.stdout.read().strip()
+    cmd = 'hostname'
+    hostname = execCommand(cmd).strip()
     return {'hostname': hostname}
 
 
-def stat():
-    k, v = sn().items()[0]
-    con = MySQLdb.Connect("192.168.1.57", "trusme", "6286280300", "cmdb")
+def runStat():
+    k, v = productSN().items()[0]
+    con = MySQLdb.Connect("172.16.1.1", "root", "123456", "cmdb")
     cur = con.cursor()
     cur.execute('select * from cmdb.web_stat')
     data = cur.fetchall()
@@ -124,7 +138,7 @@ def stat():
 def main(data):
     url = "http://172.16.1.1/login/"
     UA = "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.13 Safari/537.36"
-    header = {"User-Agent": UA,}
+    header = {"User-Agent": UA}
     session = requests.Session()
     postData = {'username': 'admin',
                 'passwd': 'trusme123',
@@ -137,11 +151,11 @@ def main(data):
 
 if __name__ == '__main__':
     dic = {}
-    dic.update(sn())
-    dic.update(ip())
-    dic.update(cpu())
-    dic.update(mem())
-    dic.update(stat())
+    dic.update(productSN())
+    dic.update(serverIP())
+    dic.update(productCpuInfo())
+    dic.update(productMemInfo())
+    dic.update(runStat())
     dic.update(hostName())
     info = json.dumps(dic)
     main(info)

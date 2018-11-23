@@ -10,15 +10,25 @@ import datetime
 import json
 import os
 import re
+import time
 from optparse import OptionParser
-from subprocess import Popen, PIPE
+from subprocess import Popen, PIPE, STDOUT
 import MySQLdb
 import threading
 import requests
 
 
-def allInfo(cmd):
-    info = Popen(cmd, stdout=PIPE, stderr=PIPE, shell=True)
+def execCommand(cmd, timeout=1):
+    info = Popen(cmd, stdout=PIPE, stderr=STDOUT, shell=True)
+    t_start = time.time()
+    while 1:
+        if info.poll() is not None:
+            break
+        seconds = time.time() - t_start
+        if timeout and seconds > timeout:
+            info.terminate()
+            return ''
+        time.sleep(0.1)
     info = info.stdout.read()
     if "SMBIOS" in info:
         msg, count = '', 0
@@ -37,7 +47,7 @@ def allInfo(cmd):
 # noinspection PyBroadException
 def connMysql(cmd):
     try:
-        con = MySQLdb.connect('127.0.0.1', 'root', '123456', 'cmdb')
+        con = MySQLdb.connect('172.16.1.1', 'root', '123456', 'cmdb')
     except:
         return ''
     cur = con.cursor()
@@ -50,7 +60,7 @@ def connMysql(cmd):
 
 def memLocator():
     cmd = '/usr/sbin/dmidecode -t 17'
-    info = allInfo(cmd)
+    info = execCommand(cmd)
     all_mem = re.findall(r'\t+Size:\s+(.*)', info, re.M)
     locate_mem = re.findall(r'\t+Locator:\s+(.*)', info, re.M)
     lo_mem = re.findall(r'\t+Bank Locator:\s+(.*)', info, re.M)
@@ -74,7 +84,7 @@ class CollectMessage(object):
 
     def cpuMessage(self):
         cmd = 'dmidecode -t 4'
-        info = allInfo(cmd)
+        info = execCommand(cmd)
         cpu_info = re.findall(r'\sVersion:(.*CPU.*)', info, re.M)
         cpu_num = len(cpu_info)
         if 'CPU @' in str(cpu_info):
@@ -89,7 +99,7 @@ class CollectMessage(object):
 
     def memoryMessage(self):
         cmd = 'dmidecode -t 17'
-        info = allInfo(cmd)
+        info = execCommand(cmd)
         size = re.compile(r'Size:[\s]+([\d]+[\s]+[a-zA-Z]{1,2})', re.M)
         mz = re.compile(r'\t+Speed:\s+([\d]+\s+MHz)', re.M)
         mem_mz = set(mz.findall(info)).pop()
@@ -105,7 +115,7 @@ class CollectMessage(object):
     def _raidMessage():
         cmd = '/opt/MegaRAID/MegaCli/MegaCli64 -cfgdsply -aall'
         try:
-            info = allInfo(cmd)
+            info = execCommand(cmd)
             raid = re.search(r'Product Name: (.*)', info)
             if raid:
                 raid = raid.group(1).split()
@@ -115,18 +125,18 @@ class CollectMessage(object):
             raid = "{0} {1}".format(raid[0], raid[-1])
         except:
             cmd = "lspci | grep SAS | awk -F : '{print $3}' | awk -F [ '{print $1}'"
-            raid = allInfo(cmd)
+            raid = execCommand(cmd)
             raid_id = ''
         return raid, raid_id
 
     def _diskMessage(self):
         cmd = '/usr/bin/lsscsi|egrep -iv "SanDisk|enclosu|Virtual|scsi" | grep disk'
-        disk_info = allInfo(cmd)
+        disk_info = execCommand(cmd)
         disk_name = re.findall(r'/dev/sd.*', disk_info, re.M)
         msg, ssd_fw = [], {}
         for i in disk_name:
             cmd = '/usr/sbin/smartctl -i %s' % i
-            info = allInfo(cmd)
+            info = execCommand(cmd)
             if 'INTEL' in info:
                 for b in info.split('\n'):
                     if b.startswith('Firmware Version:'):
@@ -134,7 +144,7 @@ class CollectMessage(object):
                         ssd_fw[i] = intel_ssd_fw
         for i in disk_name:
             cmd = '/usr/sbin/smartctl -i %s' % i
-            info = allInfo(cmd)
+            info = execCommand(cmd)
             for a in info.split('\n'):
                 if a.startswith('Device Model'):
                     msg.append(a.split(':')[1].strip())
@@ -155,7 +165,7 @@ class CollectMessage(object):
         disk_dict = diskmessage['disk']
         if raid:
             cmd = '/opt/MegaRAID/MegaCli/MegaCli64 -pdlist -aall'
-            info = allInfo(cmd)
+            info = execCommand(cmd)
             raid_size = re.findall(r'Raw Size:\s+([\d.]+\s[A-Z]{2})', info, re.M)
             raid_data = re.findall(r'Inquiry Data:\s+(.*)', info, re.M)
             raid_num = re.findall(r'Slot (Number: [\d]+)', info, re.M)
@@ -188,13 +198,13 @@ class CollectMessage(object):
 
     def smartMessage(self):
         cmd = 'ls /dev/ | grep ^sd | grep -v [0-9]'
-        info = allInfo(cmd).split()
+        info = execCommand(cmd).split()
         msg = ''
         for i in info:
             cmd = 'smartctl -i /dev/{0}'.format(i)
             cmd1 = 'smartctl -A /dev/{0}'.format(i)
-            smart_name = allInfo(cmd)
-            smart_data = allInfo(cmd1).split('\n\n')[1].strip()
+            smart_name = execCommand(cmd)
+            smart_data = execCommand(cmd1).split('\n\n')[1].strip()
             smart_data = [j for j in smart_data.split('\n') if '/dev/{0}'.format(i) not in smart_data]
             for name in smart_name.split('\n'):
                 if name.startswith('=== START'):
@@ -209,7 +219,7 @@ class CollectMessage(object):
                 msg += '\n'
         if not msg:
             cmd = 'lsblk'
-            msg = allInfo(cmd)
+            msg = execCommand(cmd)
         self.get_message.update({"smart_info": msg})
         return {"smart_info": msg}
 
@@ -220,15 +230,15 @@ class CollectMessage(object):
             for i in sorted(raid_id):
                 cmd = 'smartctl -i -d megaraid,{0} /dev/sda '.format(i)
                 cmd1 = 'smartctl -A -d megaraid,{0} /dev/sda '.format(i)
-                smart_raid_info = allInfo(cmd).split('\n')
-                smart_raid_data = allInfo(cmd1).split('\n\n')[1].strip()
+                smart_raid_info = execCommand(cmd).split('\n')
+                smart_raid_data = execCommand(cmd1).split('\n\n')[1].strip()
                 smart_raid_data = ["{0}\n".format(i) for i in smart_raid_data.strip('\n') if
                                    '/dev' not in smart_raid_data]
                 if not smart_raid_data:
                     cmd = 'smartctl -i -d sat+megaraid,{0} /dev/sda '.format(i)
                     cmd1 = 'smartctl -A -d sat+megaraid,{0} /dev/sda '.format(i)
-                    smart_raid_info = allInfo(cmd).split('\n')
-                    smart_raid_data = allInfo(cmd1).split('\n\n')[1].strip()
+                    smart_raid_info = execCommand(cmd).split('\n')
+                    smart_raid_data = execCommand(cmd1).split('\n\n')[1].strip()
                     smart_raid_data = [i for i in smart_raid_data.strip('\n') if
                                        '/dev' not in smart_raid_data]
                 for j in smart_raid_info:
@@ -245,13 +255,13 @@ class CollectMessage(object):
         return {'smart_raid_info': msg}
 
     def macMessage(self):
-        cmd = "/sbin/ifconfig"
-        info = allInfo(cmd)
-        ip_adder = re.search(r'inet addr:(192.168.1.\d{1,3})', info, re.M)
+        cmd = "ifconfig"
+        info = execCommand(cmd)
+        ip_adder = re.search(r'inet addr:(172.16.1.\d{1,3})', info, re.M)
         if ip_adder:
             ip_adder = str(ip_adder.group(1))
         else:
-            ip_adder = re.search(r'inet\s(192.168.1.\d{1,3})', info, re.M)
+            ip_adder = re.search(r'inet\s(172.16.1.\d{1,3})', info, re.M)
             if ip_adder:
                 ip_adder = str(ip_adder.group(1))
             else:
@@ -274,7 +284,7 @@ class CollectMessage(object):
 
     def networkMessage(self):
         cmd = '/sbin/lspci -v'
-        info = allInfo(cmd)
+        info = execCommand(cmd)
         ether = re.findall(r'Ethernet controller:\s+(.*)', info, re.M)
         ether_list = [' '.join(i.split()[2:-2]) for i in ether if i]
         network = {}
@@ -289,7 +299,7 @@ class CollectMessage(object):
 
     def productSnMessage(self):
         cmd = '/usr/sbin/dmidecode'
-        info = allInfo(cmd)
+        info = execCommand(cmd)
         sn_info = re.findall(r'Serial Number:\s+(.*)', info, re.M)
         if len(sn_info[:2]) == 2:
             sn = sn_info[0]
@@ -308,7 +318,7 @@ class CollectMessage(object):
 
     def productNameMessage(self):
         cmd = '/usr/sbin/dmidecode'
-        info = allInfo(cmd)
+        info = execCommand(cmd)
         product_name = re.findall(r'Product Name:\s+(.*)', info, re.M)
         if len(product_name) == 2:
             name = product_name[0]
@@ -321,7 +331,7 @@ class CollectMessage(object):
 
     def produceFamilyMessage(self):
         cmd = '/usr/sbin/dmidecode'
-        info = allInfo(cmd)
+        info = execCommand(cmd)
         family = re.search(r'Family:(.*)', info, re.M)
         if family:
             family = family.group(1).strip()
@@ -332,7 +342,7 @@ class CollectMessage(object):
 
     def produceBiosMessage(self):
         cmd = '/usr/sbin/dmidecode -t bios'
-        info = allInfo(cmd)
+        info = execCommand(cmd)
         bios = re.search(r'Version:\s+(.*)', info, re.M)
         if bios:
             bios = bios.group(1).strip()
@@ -344,7 +354,7 @@ class CollectMessage(object):
     def bmcMessage(self):
         cmd = '/usr/bin/ipmitool mc info'
         try:
-            info = allInfo(cmd)
+            info = execCommand(cmd)
             bmc = re.search(r'Firmware Revision\s+:\s+(.*)', info, re.M)
         except OSError:
             bmc = ''
@@ -357,7 +367,7 @@ class CollectMessage(object):
 
     def fruMessage(self):
         cmd = '/usr/bin/ipmitool fru'
-        info = allInfo(cmd)
+        info = execCommand(cmd)
         fru_info = ''
         if info:
             for msg in info.split('\n'):
@@ -382,19 +392,19 @@ class CollectMessage(object):
 
     def selMessage(self):
         cmd = "/usr/bin/ipmitool sel list"
-        info = allInfo(cmd)
+        info = execCommand(cmd)
         self.get_message.update({'sel': info})
         return {'sel': info}
 
     def hostnameMessage(self):
         cmd = 'hostname'
-        info = allInfo(cmd)
+        info = execCommand(cmd)
         self.get_message.update({'hostname': info})
         return {'hostname': info}
 
     def powerMessage(self):
         cmd = 'ps aux | grep shutdown | grep -v grep | wc -l'
-        info = int(allInfo(cmd))
+        info = int(execCommand(cmd))
         if info == 0:
             power = 'UNSET'
         else:
@@ -410,19 +420,19 @@ class CollectMessage(object):
 
     def bootTimeMessage(self):
         cmd = 'date -d "$(awk -F. \'{print $1}\' /proc/uptime) second ago" +"%Y-%m-%d %H:%M"'
-        bios_time = allInfo(cmd)
+        bios_time = execCommand(cmd)
         self.get_message.update({'boot_time': bios_time})
         return {'boot_time': bios_time}
 
     def biosTimeMessage(self):
         cmd = 'hwclock -r'
-        bios_time = allInfo(cmd)
+        bios_time = execCommand(cmd)
         self.get_message.update({'bios_time': bios_time})
         return {'bios_time': bios_time}
 
     def pcieMessage(self):
         cmd = 'lspci | grep "[01|02|03]:00" | grep -v ^00'
-        pci_info = allInfo(cmd)
+        pci_info = execCommand(cmd)
         self.get_message.update({"pci_info": pci_info})
         return {"pci_info": pci_info}
 
@@ -450,7 +460,7 @@ class CheckMessage(object):
     @staticmethod
     def parse(argv):
         cmd = '/bin/lsblk -b'
-        info = allInfo(cmd)
+        info = execCommand(cmd)
         disk = re.compile(r'({0})'.format(argv), re.M)
         data = disk.findall(info)
         return data
@@ -854,7 +864,7 @@ def getNameFamily(sn, sn_1):
             'XINWEIH_C612_VDS-8050',
             'XINWEIH_C612_ASERVER-2405',
         ]
-        stress_test = 'system reload'
+        stress_test = 'wait'
     return name, family, stress_test
 
 
@@ -964,7 +974,8 @@ def runMain(msg):
 def sedMessage(msg):
     url = "http://172.16.1.1/login/"
     UA = "Mozilla/5.0 (Windows NT 6.3; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.13 Safari/537.36"
-    header = {"User-Agent": UA,}
+    header = {"User-Agent": UA,
+              }
     session = requests.Session()
     postData = {'username': 'admin',
                 'passwd': 'trusme123',
