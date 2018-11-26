@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    # 'django_admin_bootstrapped',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -75,14 +76,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'webControl.wsgi.application'
 
+#Caches
 # CACHES = {
 #     'default': {
 #         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+#         'TIMEOUT': 900,
 #         'LOCATION': [
 #             '127.0.0.1:11211',
 #         ]
 #     }
 # }
+# CACHE_MIDDLEWARE_SECONDS = 900
+
+
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
@@ -134,7 +140,11 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
+
+DATETIME_FORMAT = 'Y-m-d H:i:s'
+
+DATE_FORMAT = 'Y-m-d'
 
 
 # Static files (CSS, JavaScript, Images)
