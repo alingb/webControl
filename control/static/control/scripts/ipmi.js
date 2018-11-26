@@ -19,6 +19,7 @@ var FileTableInit = function () {
         $('#ipmi').bootstrapTable({
             url: '/control/serverinfo?state=wait',         //请求后台的URL（*）
             method: 'get',    //请求方式（*）
+            contentType:"application/x-www-form-urlencoded; charset=UTF-8",
             toolbar: '#toolbar',                //工具按钮用哪个容器
             striped: true,                      //是否显示行间隔色
             cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）

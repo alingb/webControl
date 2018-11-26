@@ -22,7 +22,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'login/', login_user, name="login"),
     url(r'logout/', logout_user, name="logout"),
-    # url(r'signup/', signup, name="sigup"),
+    url(r'changepw/', changepw, name="changepw"),
     url(r'^$', index, name="index"),
     url(r'control/', include('control.urls')),
     url(r'web/', include('web.urls')),

@@ -17,19 +17,19 @@
                         </h3>
                     </div>
                     <div class="box-body">
-                        <table id="example1" class="table table-bordered table-striped">
+                        <table id="userlog" class="table table-bordered table-striped">
                             <thead>
                             <tr>
-                                <th>用户</th>
                                 <th>时间</th>
+                                <th>用户</th>
                                 <th>操作</th>
                             </tr>
                             </thead>
                             <tbody>
                             {% for each in usermsg %}
                                 <tr>
-                                    <td>{{ each.username }}</td>
                                     <td>{{ each.addTime }}</td>
+                                    <td>{{ each.username }}</td>
                                     <td>{{ each.msg }}</td>
                                 </tr>
                             {% endfor %}
@@ -47,7 +47,7 @@
     <script src="{% static 'control/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
     <script>
         $(function () {
-            $('#example1').DataTable();
+            $('#userlog').DataTable();
         })
     </script>
 {% endblock %}

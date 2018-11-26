@@ -36,45 +36,38 @@
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
                     <li class="dropdown user user-menu">
-                <!-- Menu Toggle Button -->
-                {% if user.username %}
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <!-- The user image in the navbar-->
-                        <img src="{% static 'control/dist/img/photo4.jpg' %}" class="user-image"
-                             alt="User Image">
-                        <!-- hidden-xs hides the username on small devices so only the image appears. -->
-                        <span class="hidden-xs">{{ user.username }}</span>
-                    </a>
-                {% else %}
-                    <div style="margin-top: 15px;">
-                        <a class="text-bold text-white no-underline" href="{% url "login" %}"
-                           style="color: #ffffff; font-size: 15px;">Sign in</a>
-                        {#                    <span class="text-gray" style="font-size: 20px;">or</span>#}
-                        {#                    <a class="text-bold text-white no-underline" href="/signup/" style="color: #ffffff; font-size: 15px;">Sign up</a>#}
-                    </div>
-                {% endif %}
-
-                <ul class="dropdown-menu">
-                    <!-- The user image in the menu -->
-                    <li class="user-header">
-                        <img src="{% static 'control/dist/img/photo4.jpg' %}" class="img-circle"
-                             alt="User Image">
-
-                        <p>
-                            Welcome to manager system!
-                        </p>
+                        {% if user.username %}
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <img src="{% static 'control/dist/img/photo4.jpg' %}" class="user-image"
+                                     alt="User Image">
+                                <span class="hidden-xs">{{ user.username }}</span>
+                            </a>
+                        {% else %}
+                            <div style="margin-top: 15px;">
+                                <a class="text-bold text-white no-underline" href="{% url "login" %}"
+                                   style="color: #ffffff; font-size: 15px;">登入</a>
+                            </div>
+                        {% endif %}
+                        <ul class="dropdown-menu">
+                            <li class="user-header">
+                                <img src="{% static 'control/dist/img/photo4.jpg' %}" class="img-circle"
+                                     alt="User Image">
+                                <p>
+                                    欢迎使用管理系统!
+                                </p>
+                            </li>
+                            <li class="user-footer">
+                                <div class="pull-left">
+                                    {% if user.has_usable_password %}
+                                        <a href="{% url 'changepw' %}" class="btn btn-default btn-flat">更改密码</a>
+                                    {% endif %}
+                                </div>
+                                <div class="pull-right">
+                                    <a href="{% url "logout" %}" class="btn btn-default btn-flat">注销</a>
+                                </div>
+                            </li>
+                        </ul>
                     </li>
-                    <!-- Menu Footer-->
-                    <li class="user-footer">
-                        <div class="pull-left">
-                            <a href="#" class="btn btn-default btn-flat">Profile</a>
-                        </div>
-                        <div class="pull-right">
-                            <a href="{% url "logout" %}" class="btn btn-default btn-flat">Sign out</a>
-                        </div>
-                    </li>
-                </ul>
-            </li>
                 </ul>
             </div>
         </nav>
@@ -91,10 +84,12 @@
             </div>
             <ul class="sidebar-menu" data-widget="tree">
                 {% block link1 %}
-                    <li id="link1"><a href="{% url "index" %}"><i class="fa fa-dashboard"></i> <span>概括信息</span></a></li>
+                    <li id="link1"><a href="{% url "index" %}"><i class="fa fa-dashboard"></i> <span>概括信息</span></a>
+                    </li>
                 {% endblock link1 %}
                 {% block link2 %}
-                    <li id="link2"><a href="{% url "serverdetail" %}"><i class="fa fa-user"></i> <span>机器列表</span></a></li>
+                    <li id="link2"><a href="{% url "serverdetail" %}"><i class="fa fa-user"></i> <span>机器列表</span></a>
+                    </li>
                 {% endblock link2 %}
                 {% block link3 %}
                     <li><a href="{% url "userlog" %}"><i class="fa fa-wrench"></i> <span>操作日志</span></a></li>
@@ -108,7 +103,8 @@
                         </a>
                         <ul class="treeview-menu">
                             <li id="tv1"><a href="{% url "bios" %}"><i class="fa fa-calendar-check-o"></i>客制化</a></li>
-                            <li id="tv2"><a href="{% url "execute" %}"><i class="fa fa-calendar-check-o"></i>老化程序</a></li>
+                            <li id="tv2"><a href="{% url "execute" %}"><i class="fa fa-calendar-check-o"></i>老化程序</a>
+                            </li>
                         </ul>
                     </li>
                 {% endblock treeview %}

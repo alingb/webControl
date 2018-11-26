@@ -42,7 +42,7 @@ def index(req):
     else:
         totalNum = Host.objects.exclude(stress_test__contains="OS off").count()
         runNum = Host.objects.filter(stress_test="running").count()
-        stopNum = Host.objects.filter(Q(stress_test="reload")).count()
+        stopNum = Host.objects.filter(stress_test__contains="OS off").count()
         offNum = Host.objects.filter(status__contains="erro").count()
         form = Stat.objects.all()
         count = form.count()
@@ -70,12 +70,55 @@ def index(req):
                                           'form': form, 'count': count, 'dic': strs})
 
 
-@login_required
-def serverDetail(req):
-    global name, status
-    name = req.GET.get("name")
-    status = req.GET.get("status")
-    return render(req, 'serverdetail.html')
+@login_required()
+def serverDetail(request):
+    if request.method == "GET":
+        global name, status
+        name = request.GET.get("name")
+        status = request.GET.get("status")
+        return render(request, 'serverdetail.html')
+    else:
+        limit = request.POST.get("limit")
+        offset = request.POST.get("offset")
+        search = request.POST.get("search")
+        sort = request.POST.get("sort")
+        sortOrder = request.POST.get("sortOrder")
+        if name == "run":
+            host = Host.objects.filter(stress_test=status)
+        elif name == "error":
+            host = Host.objects.filter(status__contains=status)
+        elif name == "on":
+            host = Host.objects.exclude(stress_test__contains="OS off")
+        elif name == "off":
+            host = Host.objects.filter(stress_test__contains="OS off")
+        else:
+            host = Host.objects.all()
+        if search:
+            host = host.filter(Q(sn__contains=search) |
+                               Q(sn_1__contains=search) |
+                               Q(name1__contains=search) |
+                               Q(name__contains=search) |
+                               Q(family__contains=search) |
+                               Q(status__contains=search) |
+                               Q(ip__contains=search))
+        lenth = host.count()
+        if sort and sortOrder:
+            if sortOrder == "asc":
+                host = host.order_by("{}".format(sort))
+            elif sortOrder == "desc":
+                host = host.order_by("-{}".format(sort))
+        if offset and limit:
+            offset = int(offset)
+            limit = int(limit)
+            host = host[offset:offset + limit]
+        data = []
+        for each in host:
+            data.append(
+                model_to_dict(each, fields=['id', 'sn', 'sn_1', 'name', 'name1', 'family', 'change_stat', 'cmd_stat',
+                                            'status', 'bios', 'bmc', 'ip', 'stress_test']))
+        return HttpResponse(json.dumps({"rows": data, "total": lenth}))
+
+
 
 
 @login_required
@@ -100,30 +143,15 @@ def bios(req):
 def execute(req):
     return render(req, 'execute.html')
 
-
-@login_required
+@login_required()
 def serverInfo(request):
-    global name, status
     limit = request.GET.get("limit")
     offset = request.GET.get("offset")
     search = request.GET.get("search")
     state = request.GET.get("state")
     sort = request.GET.get("sort")
     sortOrder = request.GET.get("sortOrder")
-    host = ''
-    try:
-        if name and status:
-            if name == "run":
-                host = Host.objects.filter(stress_test=status)
-            elif name == "error":
-                host = Host.objects.filter(status__contains=status)
-            name, status = '', ''
-    except Exception:
-        pass
-    if not host:
-        host = Host.objects.all()
-    if state:
-        host = host.filter(stress_test=state)
+    host = Host.objects.filter(stress_test=state)
     if search:
         host = host.filter(Q(sn__contains=search) |
                            Q(sn_1__contains=search) |

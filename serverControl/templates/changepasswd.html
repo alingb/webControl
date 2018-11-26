@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<body class="hold-transition register-page">
+<div class="register-box">
+  <div class="register-logo">
+    <a href="{% url 'index' %}"><b>更改密码</b></a>
+  </div>
+
+  <div class="register-box-body">
+    <p class="login-box-msg">更改一个新的密码</p>
+
+    <form action="{% url "changepw" %}" method="post">
+        {% if error %}
+            <div class="alert alert-danger">
+                {{ error }}
+            </div>
+        {% endif %}
+      <div class="form-group has-feedback">
+        <input type="password" name="oldpasswd" class="form-control" placeholder="旧密码">
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <input type="password" name="password" class="form-control" placeholder="新密码">
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <input type="password" name="rpassword" class="form-control" placeholder="确认密码">
+        <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
+      </div>
+      <div class="row">
+        <div class="col-xs-6">
+          <button type="submit" class="btn btn-primary btn-block btn-flat">更改密码</button>
+        </div>
+      </div>
+    </form>
+
+  </div>
+</div>
+{% endblock %}
