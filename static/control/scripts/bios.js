@@ -218,11 +218,10 @@ function buttonStart() {
                     });
                     $("#bios_button").attr({"disabled": "disabled"});
                     toastr.success('BIOS Execute sucess!');
-                    $("#bios_close").click(function () {
-                        setTimeout(function () {
+                    $("#bios_close").click();
+                    setTimeout(function () {
                             $("#bios").bootstrapTable('refresh');
-                        }, 3000)
-                    });
+                        }, 3000);
                 });
             }
         }
@@ -256,11 +255,10 @@ function buttonStart() {
                     });
                     $("#bmc_button").attr({"disabled": "disabled"});
                     toastr.success('BMC Execute sucess!');
-                    $("#bios_close").click(function () {
-                        setTimeout(function () {
+                    $("#bios_close").click();
+                    setTimeout(function () {
                             $("#bios").bootstrapTable('refresh');
-                        }, 3000)
-                    });
+                        }, 3000);
                 });
             }
         }
@@ -281,11 +279,10 @@ function buttonStart() {
                     }
                     $("#data").val(data);
                     $("#fru_form").submit();
-                    $("#fru_close").click(function () {
-                        setTimeout(function () {
+                    $("#fru_close").click();
+                    setTimeout(function () {
                             $("#bios").bootstrapTable('refresh');
-                        }, 3000)
-                    });
+                        }, 3000);
                 }
             );
         }
