@@ -21,17 +21,25 @@ def login_user(request):
         next = request.GET.get("next")
         user = authenticate(username=username, password=passwd)
         if user:
-            login(request, user)
-            if check:
-                request.session.set_expiry(None)
+            if user.is_active:
+                if user.is_staff:
+                    login(request, user)
+                    if check:
+                        request.session.set_expiry(None)
+                    else:
+                        request.session.set_expiry(0)
+                    if next:
+                        msgSave(username, "登入成功")
+                        return HttpResponseRedirect(next)
+                    else:
+                        msgSave(username, "登入成功")
+                        return redirect(reverse('index'))
+                else:
+                    msgSave(username, "没有登入权限")
+                    return render(request, 'login.html', {'error': u'用户没有登入权限!'})
             else:
-                request.session.set_expiry(0)
-            if next:
-                msgSave(username, "登入成功")
-                return HttpResponseRedirect(next)
-            else:
-                msgSave(username, "登入成功")
-                return redirect(reverse('index'))
+                msgSave(username, "用户未激活")
+                return render(request, 'login.html', {'error': u'用户没有激活!'})
         else:
             msgSave(username, "登入失败")
             return render(request, 'login.html', {'error': u'用户名或密码错误!'})

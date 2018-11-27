@@ -6,7 +6,7 @@ $(document).ready(function () {
     buttonStart();
     setInterval(function() {
         $("#bios").bootstrapTable('refresh');
-}, 20000);
+}, 10000);
 });
 
 
@@ -218,11 +218,12 @@ function buttonStart() {
                     });
                     $("#bios_button").attr({"disabled": "disabled"});
                     toastr.success('BIOS Execute sucess!');
-                    $("#bios_close").click();
-                    $("#bios").bootstrapTable('refresh');
+                    $("#bios_close").click(function () {
+                        setTimeout(function () {
+                            $("#bios").bootstrapTable('refresh');
+                        }, 3000)
+                    });
                 });
-
-
             }
         }
     );
@@ -255,8 +256,11 @@ function buttonStart() {
                     });
                     $("#bmc_button").attr({"disabled": "disabled"});
                     toastr.success('BMC Execute sucess!');
-                    $("#bios_close").click();
-                    $("#bios").bootstrapTable('refresh');
+                    $("#bios_close").click(function () {
+                        setTimeout(function () {
+                            $("#bios").bootstrapTable('refresh');
+                        }, 3000)
+                    });
                 });
             }
         }
@@ -277,8 +281,11 @@ function buttonStart() {
                     }
                     $("#data").val(data);
                     $("#fru_form").submit();
-                    $("#fru_close").click();
-                    // window.location.href = '/control/bios';
+                    $("#fru_close").click(function () {
+                        setTimeout(function () {
+                            $("#bios").bootstrapTable('refresh');
+                        }, 3000)
+                    });
                 }
             );
         }

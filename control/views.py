@@ -198,22 +198,42 @@ def checkStat(Salt, each, cmd, info, username, name, name1):
     host.save()
     time.sleep(1)
     try:
-        host.change_stat = "{}指令执行中……".format(info)
-        host.save()
-        Salt.salt_async_command('{}'.format(each['ip']), 'cmd.run', [cmd])
-        cmd1 = 'ps aux | grep {}_lnx64 | grep -v grep'.format(info)
-        while 1:
-            data = Salt.cmd('{}'.format(each['ip']), 'cmd.run', [cmd1])
-            msg = data[each['ip']]
-            if msg:
-                time.sleep(10)
-                continue
-            else:
-                host.change_stat = "{}客制化完成".format(info)
-                host.save()
-                msg = "机器名称为:{},产品名称为:{}的设备刷新{}版本成功".format(name, name1, info)
-                msgSave(username, msg)
-                break
+        salt_jid = Salt.salt_async_command('{}'.format(each['ip']), 'cmd.run', [cmd])
+        if salt_jid:
+            host.change_stat = "{}指令执行中……".format(info)
+            host.save()
+            while 1:
+                salt_msg = Salt.look_jid(salt_jid)
+                if salt_msg:
+                    if salt_msg:
+                        host.change_stat = "{}客制化完成".format(info)
+                        host.save()
+                        msg = "机器名称为:{0},产品名称为:{1}的设备(SN:{2},SN_1:{3})刷新{4}版本成功".format(name, name1, each['sn'],
+                                                                                        each['sn_1'], info)
+                        msgSave(username, msg)
+                    else:
+                        host.change_stat = "{}客制化失败".format(info)
+                        host.save()
+                        msg = "机器名称为:{0},产品名称为:{1}的设备(SN:{2},SN_1:{3})刷新{4}版本失败".format(name, name1, each['sn'],
+                                                                                        each['sn_1'], info)
+                        msgSave(username, msg)
+                    break
+                else:
+                    time.sleep(1)
+        # cmd1 = 'ps aux | grep {}_lnx64 | grep -v grep'.format(info)
+        # while 1:
+        #     data = Salt.cmd('{}'.format(each['ip']), 'cmd.run', [cmd1])
+        #     msg = data[each['ip']]
+        #     if msg:
+        #         time.sleep(10)
+        #         continue
+        #     else:
+        #         host.change_stat = "{}客制化完成".format(info)
+        #         host.save()
+        #         msg = "机器名称为:{0},产品名称为:{1}的设备(SN:{2},SN_1:{3})刷新{4}版本成功".format(name, name1, each['sn'], each['sn_1'],
+        #                                                                         info)
+        #         msgSave(username, msg)
+        #         break
     except Exception:
         host.change_stat = "{}指令执行失败".format(info)
         msg = "机器名称为:{},产品名称为:{}的设备刷新{}版本失败".format(name, name1, info)

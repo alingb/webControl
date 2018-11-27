@@ -4,6 +4,9 @@ $(document).ready(function () {
     var oFileTable = new FileTableInit();
     oFileTable.Init();
     buttonStart();
+    setInterval(function() {
+        $("#ipmi").bootstrapTable('refresh');
+}, 10000);
 });
 
 
