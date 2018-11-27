@@ -46,17 +46,14 @@ class SaltApi:
         return result['return'][0]
 
     def cmd(self, tgt, method, arg=None):
-        """远程执行命令，相当于salt 'client1' cmd.run 'free -m'"""
         if arg:
             params = {'client': 'local', 'fun': method, 'tgt': tgt, 'arg': arg}
         else:
             params = {'client': 'local', 'fun': method, 'tgt': tgt}
-        # print '命令参数: ', params
         result = self.get_data(self.url, params)
         return result
 
-    def salt_async_command(self, tgt, method, arg=None):  # 异步执行salt命令，根据jid查看执行结果
-        """远程异步执行命令"""
+    def salt_async_command(self, tgt, method, arg=None):
         if arg:
             params = {'client': 'local_async', 'fun': method, 'tgt': tgt, 'arg': arg}
         else:
@@ -64,7 +61,7 @@ class SaltApi:
         jid = self.get_data(self.url, params)['jid']
         return jid
 
-    def look_jid(self, jid):  # 根据异步执行命令返回的jid查看事件结果
+    def look_jid(self, jid):
         params = {'client': 'runner', 'fun': 'jobs.lookup_jid', 'jid': jid}
         print params
         result = self.get_data(self.url, params)
@@ -72,8 +69,6 @@ class SaltApi:
 
 
 if __name__ == '__main__':
-    print '=================='
-    print '同步执行命令'
     salt = SaltApi(salt_api)
     print salt.token
     salt_client = '*'
