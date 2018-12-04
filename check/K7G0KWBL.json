@@ -1,0 +1,709 @@
+{
+   "beginTime" : "2018-11-28T02:53:51.165860Z",
+   "beginTimeLocal" : "2018-Nov-28 10:53:51",
+   "blockDevice" : "/dev/sdc",
+   "blockSize" : 512,
+   "capacity" : "4 TB",
+   "codes" : [
+      {
+         "L1Label" : "HDD-Write Fault Count > 0",
+         "code" : "825",
+         "description" : "Write Fault Count > 0",
+         "severity" : "failure"
+      }
+   ],
+   "csvFile" : "/root/name/K7G0KWBL/K7G0KWBL.csv",
+   "driveReadyDetails" : {
+      "driveReady" : true
+   },
+   "driver" : "Linux SG",
+   "durationSeconds" : 16,
+   "eyeDiagramVersion" : 11,
+   "finalDisposition" : "Return To WDC",
+   "finishTime" : "2018-11-28T02:54:07.800325Z",
+   "finishTimeLocal" : "2018-Nov-28 10:54:07",
+   "firmware" : "APBDTAF0",
+   "firmwareLong" : "APBDTAF0",
+   "interface" : "SATA",
+   "interfaceDetails" : {
+      "negotiatedGeneration" : "Gen3",
+      "negotiatedLinkSpeed" : "6Gb/s",
+      "supportedLinkSpeed" : "6Gb/s"
+   },
+   "manufacturer" : "HGST a Western Digital Company",
+   "maxTemperature" : 52,
+   "mfgDate" : "201734W",
+   "model" : "HUS726040ALE610",
+   "numberOfBlocks" : 7814037168,
+   "odometer" : {
+      "bytesRead" : "12.3TB",
+      "bytesReadRaw" : 12346966432768,
+      "bytesWritten" : "7.42TB",
+      "bytesWrittenRaw" : 7423779962880,
+      "headLoadCommands" : 220,
+      "nonReadWriteCommands" : 546529,
+      "readCommands" : 90483235,
+      "seekCommands" : 20264096,
+      "writeCommands" : 17349183,
+      "writeLongCommands" : 0
+   },
+   "partNumber" : "0F26919",
+   "path" : "/dev/sg2",
+   "physicalBlockSize" : 4096,
+   "powerOnHours" : 24115,
+   "psidRequired" : false,
+   "rawCapacity" : 4000787030016,
+   "rpm" : 7200,
+   "selfTestStatus" : "Ready",
+   "selfTestStatusNibble" : 0,
+   "serial" : "K7G0KWBL",
+   "smart" : {
+      "attribute" : [
+         {
+            "flags" : "0x000b",
+            "id" : 1,
+            "name" : "Raw Read Error Rate",
+            "online" : "yes",
+            "raw" : 0,
+            "threshold" : 16,
+            "type" : "pre-fail",
+            "value" : 100,
+            "worst" : 100
+         },
+         {
+            "flags" : "0x0005",
+            "id" : 2,
+            "name" : "Throughput",
+            "online" : "no",
+            "raw" : 104,
+            "threshold" : 54,
+            "type" : "pre-fail",
+            "value" : 137,
+            "worst" : 137
+         },
+         {
+            "flags" : "0x0007",
+            "id" : 3,
+            "name" : "Spin Up Time",
+            "online" : "yes",
+            "raw" : "7, 7.800, 7.220",
+            "threshold" : 24,
+            "type" : "pre-fail",
+            "value" : 142,
+            "worst" : 142
+         },
+         {
+            "flags" : "0x0012",
+            "id" : 4,
+            "name" : "Start/Stop Count",
+            "online" : "yes",
+            "raw" : 87,
+            "threshold" : 0,
+            "type" : "old age",
+            "value" : 100,
+            "worst" : 100
+         },
+         {
+            "flags" : "0x0033",
+            "id" : 5,
+            "name" : "Reallocated Sector Count",
+            "online" : "yes",
+            "raw" : 288,
+            "threshold" : 5,
+            "type" : "pre-fail",
+            "value" : 100,
+            "worst" : 100
+         },
+         {
+            "flags" : "0x000b",
+            "id" : 7,
+            "name" : "Seek Error Rate",
+            "online" : "yes",
+            "raw" : 0,
+            "threshold" : 67,
+            "type" : "pre-fail",
+            "value" : 100,
+            "worst" : 100
+         },
+         {
+            "flags" : "0x0005",
+            "id" : 8,
+            "name" : "Seek Time",
+            "online" : "no",
+            "raw" : 15,
+            "threshold" : 20,
+            "type" : "pre-fail",
+            "value" : 140,
+            "worst" : 140
+         },
+         {
+            "flags" : "0x0012",
+            "id" : 9,
+            "name" : "Power-On Hours",
+            "online" : "yes",
+            "raw" : 244,
+            "threshold" : 0,
+            "type" : "old age",
+            "value" : 100,
+            "worst" : 100
+         },
+         {
+            "flags" : "0x0013",
+            "id" : 10,
+            "name" : "Spin Retry Count",
+            "online" : "yes",
+            "raw" : 0,
+            "threshold" : 60,
+            "type" : "pre-fail",
+            "value" : 100,
+            "worst" : 100
+         },
+         {
+            "flags" : "0x0032",
+            "id" : 12,
+            "name" : "Power Cycle Count",
+            "online" : "yes",
+            "raw" : 87,
+            "threshold" : 0,
+            "type" : "old age",
+            "value" : 100,
+            "worst" : 100
+         },
+         {
+            "flags" : "0x0032",
+            "id" : 192,
+            "name" : "Power Off Retract Count",
+            "online" : "yes",
+            "raw" : 220,
+            "threshold" : 0,
+            "type" : "old age",
+            "value" : 100,
+            "worst" : 100
+         },
+         {
+            "flags" : "0x0012",
+            "id" : 193,
+            "name" : "Load/Unload Cycle Count",
+            "online" : "yes",
+            "raw" : 220,
+            "threshold" : 0,
+            "type" : "old age",
+            "value" : 100,
+            "worst" : 100
+         },
+         {
+            "flags" : "0x0002",
+            "id" : 194,
+            "name" : "Device Temperature",
+            "online" : "yes",
+            "raw" : "31 (18-52)",
+            "threshold" : 0,
+            "type" : "old age",
+            "value" : 193,
+            "worst" : 193
+         },
+         {
+            "flags" : "0x0032",
+            "id" : 196,
+            "name" : "Reallocation Event Count",
+            "online" : "yes",
+            "raw" : 288,
+            "threshold" : 0,
+            "type" : "old age",
+            "value" : 100,
+            "worst" : 100
+         },
+         {
+            "flags" : "0x0022",
+            "id" : 197,
+            "name" : "Current Pending Sector Count",
+            "online" : "yes",
+            "raw" : 0,
+            "threshold" : 0,
+            "type" : "old age",
+            "value" : 100,
+            "worst" : 100
+         },
+         {
+            "flags" : "0x0008",
+            "id" : 198,
+            "name" : "Offline Uncorrectable Sector Count",
+            "online" : "no",
+            "raw" : 0,
+            "threshold" : 0,
+            "type" : "old age",
+            "value" : 100,
+            "worst" : 100
+         },
+         {
+            "flags" : "0x000a",
+            "id" : 199,
+            "name" : "Ultra DMA CRC Error Count",
+            "online" : "yes",
+            "raw" : 2,
+            "threshold" : 0,
+            "type" : "old age",
+            "value" : 200,
+            "worst" : 200
+         }
+      ],
+      "extendedSelfTest" : {
+         "name" : "Extended SMART Self Test Log",
+         "version" : "0x0"
+      },
+      "selfTest" : {
+         "name" : "SMART Self Test Log",
+         "version" : "0x0"
+      },
+      "structure version" : "0x10"
+   },
+   "tasks" : [
+      {
+         "task" : {
+            "beginTime" : "2018-11-28T02:53:51.167107Z",
+            "beginTimeLocal" : "2018-Nov-28 10:53:51",
+            "durationSeconds" : 0,
+            "executed" : true,
+            "finishTime" : "2018-11-28T02:53:51.168267Z",
+            "finishTimeLocal" : "2018-Nov-28 10:53:51",
+            "name" : "Ready Check",
+            "result" : [
+               {
+                  "testResults" : [
+                     {
+                        "dataName" : "Output Element",
+                        "dataValue" : 0,
+                        "disposition" : "No rules were defined for this task in the criteria that was used",
+                        "library" : "BuiltIn",
+                        "name" : "Ready Check"
+                     }
+                  ]
+               }
+            ],
+            "taskDisposition" : "No Problem Found"
+         }
+      },
+      {
+         "task" : {
+            "beginTime" : "2018-11-28T02:53:51.168323Z",
+            "beginTimeLocal" : "2018-Nov-28 10:53:51",
+            "durationSeconds" : 16,
+            "executed" : true,
+            "finishTime" : "2018-11-28T02:54:07.360217Z",
+            "finishTimeLocal" : "2018-Nov-28 10:54:07",
+            "name" : "Collect Log",
+            "result" : [
+               {
+                  "files" : [
+                     {
+                        "e6Log" : "/root/name/K7G0KWBL/K7G0KWBL_E6.bin"
+                     }
+                  ],
+                  "returnCode" : -4,
+                  "returnCodeDecode" : "Device does not support this command."
+               }
+            ],
+            "taskDisposition" : "No Problem Found"
+         }
+      },
+      {
+         "task" : {
+            "beginTime" : "2018-11-28T02:54:07.360274Z",
+            "beginTimeLocal" : "2018-Nov-28 10:54:07",
+            "durationSeconds" : 0,
+            "executed" : true,
+            "finishTime" : "2018-11-28T02:54:07.537447Z",
+            "finishTimeLocal" : "2018-Nov-28 10:54:07",
+            "name" : "Head Amplitude Check",
+            "result" : [
+               {
+                  "testResults" : [
+                     {
+                        "dataName" : "Output Element",
+                        "dataValue" : 0,
+                        "disposition" : "No Problem Found",
+                        "library" : "Caldera",
+                        "name" : "Head Amplitude Check"
+                     }
+                  ]
+               }
+            ],
+            "taskDisposition" : "No Problem Found"
+         }
+      },
+      {
+         "task" : {
+            "beginTime" : "2018-11-28T02:54:07.537547Z",
+            "beginTimeLocal" : "2018-Nov-28 10:54:07",
+            "durationSeconds" : 0,
+            "executed" : true,
+            "finishTime" : "2018-11-28T02:54:07.551888Z",
+            "finishTimeLocal" : "2018-Nov-28 10:54:07",
+            "name" : "SMART Attribute Check",
+            "result" : [
+               {
+                  "testResults" : [
+                     {
+                        "dataName" : "AttributeId",
+                        "dataValue" : 1,
+                        "disposition" : "No Problem Found",
+                        "library" : "Caldera",
+                        "name" : "SMART Attribute Check"
+                     },
+                     {
+                        "dataName" : "AttributeId",
+                        "dataValue" : 2,
+                        "disposition" : "No Problem Found",
+                        "library" : "Caldera",
+                        "name" : "SMART Attribute Check"
+                     },
+                     {
+                        "dataName" : "AttributeId",
+                        "dataValue" : 3,
+                        "disposition" : "No Problem Found",
+                        "library" : "Caldera",
+                        "name" : "SMART Attribute Check"
+                     },
+                     {
+                        "dataName" : "AttributeId",
+                        "dataValue" : 4,
+                        "disposition" : "No Problem Found",
+                        "library" : "Caldera",
+                        "name" : "SMART Attribute Check"
+                     },
+                     {
+                        "dataName" : "AttributeId",
+                        "dataValue" : 5,
+                        "disposition" : "No Problem Found",
+                        "library" : "Caldera",
+                        "name" : "SMART Attribute Check"
+                     },
+                     {
+                        "dataName" : "AttributeId",
+                        "dataValue" : 7,
+                        "disposition" : "No Problem Found",
+                        "library" : "Caldera",
+                        "name" : "SMART Attribute Check"
+                     },
+                     {
+                        "dataName" : "AttributeId",
+                        "dataValue" : 8,
+                        "disposition" : "No Problem Found",
+                        "library" : "Caldera",
+                        "name" : "SMART Attribute Check"
+                     },
+                     {
+                        "dataName" : "AttributeId",
+                        "dataValue" : 9,
+                        "disposition" : "No Problem Found",
+                        "library" : "Caldera",
+                        "name" : "SMART Attribute Check"
+                     },
+                     {
+                        "dataName" : "AttributeId",
+                        "dataValue" : 10,
+                        "disposition" : "No Problem Found",
+                        "library" : "Caldera",
+                        "name" : "SMART Attribute Check"
+                     },
+                     {
+                        "dataName" : "AttributeId",
+                        "dataValue" : 12,
+                        "disposition" : "No Problem Found",
+                        "library" : "Caldera",
+                        "name" : "SMART Attribute Check"
+                     },
+                     {
+                        "dataName" : "AttributeId",
+                        "dataValue" : 192,
+                        "disposition" : "No Problem Found",
+                        "library" : "Caldera",
+                        "name" : "SMART Attribute Check"
+                     },
+                     {
+                        "dataName" : "AttributeId",
+                        "dataValue" : 193,
+                        "disposition" : "No Problem Found",
+                        "library" : "Caldera",
+                        "name" : "SMART Attribute Check"
+                     },
+                     {
+                        "dataName" : "AttributeId",
+                        "dataValue" : 194,
+                        "disposition" : "No Problem Found",
+                        "library" : "Caldera",
+                        "name" : "SMART Attribute Check"
+                     },
+                     {
+                        "dataName" : "AttributeId",
+                        "dataValue" : 196,
+                        "disposition" : "No Problem Found",
+                        "library" : "Caldera",
+                        "name" : "SMART Attribute Check"
+                     },
+                     {
+                        "dataName" : "AttributeId",
+                        "dataValue" : 197,
+                        "disposition" : "No Problem Found",
+                        "library" : "Caldera",
+                        "name" : "SMART Attribute Check"
+                     },
+                     {
+                        "dataName" : "AttributeId",
+                        "dataValue" : 198,
+                        "disposition" : "No Problem Found",
+                        "library" : "Caldera",
+                        "name" : "SMART Attribute Check"
+                     },
+                     {
+                        "dataName" : "AttributeId",
+                        "dataValue" : 199,
+                        "disposition" : "No Problem Found",
+                        "library" : "Caldera",
+                        "name" : "SMART Attribute Check"
+                     },
+                     {
+                        "dataName" : "Output Element",
+                        "dataValue" : 17,
+                        "disposition" : "No Problem Found",
+                        "library" : "Caldera",
+                        "name" : "SMART Attribute Check"
+                     },
+                     {
+                        "dataName" : "Output Element",
+                        "dataValue" : 18,
+                        "disposition" : "No rules were defined for this task in the criteria that was used",
+                        "library" : "Caldera",
+                        "name" : "SMART Attribute Check"
+                     }
+                  ]
+               }
+            ],
+            "taskDisposition" : "No Problem Found"
+         }
+      },
+      {
+         "task" : {
+            "beginTime" : "2018-11-28T02:54:07.552077Z",
+            "beginTimeLocal" : "2018-Nov-28 10:54:07",
+            "durationSeconds" : 0,
+            "executed" : false,
+            "finishTime" : "2018-11-28T02:54:07.552170Z",
+            "finishTimeLocal" : "2018-Nov-28 10:54:07",
+            "name" : "Log Sense Check",
+            "taskDisposition" : "No Problem Found",
+            "userMessage" : "This task is only valid for SAS targets."
+         }
+      },
+      {
+         "task" : {
+            "beginTime" : "2018-11-28T02:54:07.552218Z",
+            "beginTimeLocal" : "2018-Nov-28 10:54:07",
+            "durationSeconds" : 0,
+            "executed" : false,
+            "finishTime" : "2018-11-28T02:54:07.552312Z",
+            "finishTimeLocal" : "2018-Nov-28 10:54:07",
+            "name" : "Sata Self Test Log Check",
+            "taskDisposition" : "No Problem Found",
+            "userMessage" : "This task is only valid for legacy SATA HGST targets."
+         }
+      },
+      {
+         "task" : {
+            "beginTime" : "2018-11-28T02:54:07.552375Z",
+            "beginTimeLocal" : "2018-Nov-28 10:54:07",
+            "durationSeconds" : 0,
+            "executed" : true,
+            "finishTime" : "2018-11-28T02:54:07.555907Z",
+            "finishTimeLocal" : "2018-Nov-28 10:54:07",
+            "name" : "E6 Self Test Log Check",
+            "result" : [
+               {
+                  "testResults" : [
+                     {
+                        "dataName" : "Output Element",
+                        "dataValue" : 0,
+                        "disposition" : "No Problem Found",
+                        "library" : "Caldera",
+                        "name" : "E6 Self Test Log Check"
+                     }
+                  ]
+               }
+            ],
+            "taskDisposition" : "No Problem Found"
+         }
+      },
+      {
+         "task" : {
+            "beginTime" : "2018-11-28T02:54:07.555976Z",
+            "beginTimeLocal" : "2018-Nov-28 10:54:07",
+            "durationSeconds" : 0,
+            "executed" : false,
+            "finishTime" : "2018-11-28T02:54:07.556065Z",
+            "finishTimeLocal" : "2018-Nov-28 10:54:07",
+            "name" : "Legacy Event Log Check",
+            "taskDisposition" : "No Problem Found",
+            "userMessage" : "This task is only valid for legacy SATA HGST targets."
+         }
+      },
+      {
+         "task" : {
+            "beginTime" : "2018-11-28T02:54:07.556119Z",
+            "beginTimeLocal" : "2018-Nov-28 10:54:07",
+            "durationSeconds" : 0,
+            "executed" : true,
+            "finishTime" : "2018-11-28T02:54:07.740065Z",
+            "finishTimeLocal" : "2018-Nov-28 10:54:07",
+            "name" : "E6 Error Log Check",
+            "result" : [
+               {
+                  "testResults" : [
+                     {
+                        "code" : 825,
+                        "dataName" : "Output Element",
+                        "dataValue" : 0,
+                        "disposition" : "Return To WDC",
+                        "library" : "Caldera",
+                        "name" : "E6 SATA Error Log Check",
+                        "origin" : "Write Fault Count > 0",
+                        "severity" : "failure"
+                     }
+                  ]
+               }
+            ],
+            "taskDisposition" : "Return To WDC"
+         }
+      },
+      {
+         "task" : {
+            "beginTime" : "2018-11-28T02:54:07.740187Z",
+            "beginTimeLocal" : "2018-Nov-28 10:54:07",
+            "durationSeconds" : 0,
+            "executed" : false,
+            "finishTime" : "2018-11-28T02:54:07.740250Z",
+            "finishTimeLocal" : "2018-Nov-28 10:54:07",
+            "name" : "Servo Test",
+            "taskDisposition" : "No Problem Found",
+            "userMessage" : "This task is only valid on a drive which is not security frozen."
+         }
+      },
+      {
+         "task" : {
+            "beginTime" : "2018-11-28T02:54:07.740278Z",
+            "beginTimeLocal" : "2018-Nov-28 10:54:07",
+            "durationSeconds" : 0,
+            "executed" : false,
+            "finishTime" : "2018-11-28T02:54:07.740321Z",
+            "finishTimeLocal" : "2018-Nov-28 10:54:07",
+            "name" : "Handling Damage Check",
+            "taskDisposition" : "No Problem Found",
+            "userMessage" : "This task is only valid for legacy SATA HGST targets."
+         }
+      },
+      {
+         "task" : {
+            "beginTime" : "2018-11-28T02:54:07.740344Z",
+            "beginTimeLocal" : "2018-Nov-28 10:54:07",
+            "durationSeconds" : 0,
+            "executed" : false,
+            "finishTime" : "2018-11-28T02:54:07.740397Z",
+            "finishTimeLocal" : "2018-Nov-28 10:54:07",
+            "name" : "Legacy Reassign Defect Map Check",
+            "taskDisposition" : "No Problem Found",
+            "userMessage" : "This task is only valid for legacy SATA HGST targets."
+         }
+      },
+      {
+         "task" : {
+            "beginTime" : "2018-11-28T02:54:07.740419Z",
+            "beginTimeLocal" : "2018-Nov-28 10:54:07",
+            "durationSeconds" : 0,
+            "executed" : true,
+            "finishTime" : "2018-11-28T02:54:07.751719Z",
+            "finishTimeLocal" : "2018-Nov-28 10:54:07",
+            "name" : "GList Check",
+            "result" : [
+               {
+                  "testResults" : [
+                     {
+                        "dataName" : "Output Element",
+                        "dataValue" : 0,
+                        "disposition" : "No rules were defined for this task in the criteria that was used",
+                        "library" : "Caldera",
+                        "name" : "SATA GList Check"
+                     }
+                  ]
+               }
+            ],
+            "taskDisposition" : "No Problem Found"
+         }
+      },
+      {
+         "task" : {
+            "beginTime" : "2018-11-28T02:54:07.751765Z",
+            "beginTimeLocal" : "2018-Nov-28 10:54:07",
+            "durationSeconds" : 0,
+            "executed" : false,
+            "finishTime" : "2018-11-28T02:54:07.751839Z",
+            "finishTimeLocal" : "2018-Nov-28 10:54:07",
+            "name" : "Bootloader Info Structure Check",
+            "taskDisposition" : "No Problem Found",
+            "userMessage" : "Not valid for HDD Targets."
+         }
+      },
+      {
+         "task" : {
+            "beginTime" : "2018-11-28T02:54:07.751862Z",
+            "beginTimeLocal" : "2018-Nov-28 10:54:07",
+            "durationSeconds" : 0,
+            "executed" : false,
+            "finishTime" : "2018-11-28T02:54:07.751903Z",
+            "finishTimeLocal" : "2018-Nov-28 10:54:07",
+            "name" : "XOR Status Check",
+            "taskDisposition" : "No Problem Found",
+            "userMessage" : "Not valid for HDD Targets."
+         }
+      },
+      {
+         "task" : {
+            "beginTime" : "2018-11-28T02:54:07.751925Z",
+            "beginTimeLocal" : "2018-Nov-28 10:54:07",
+            "durationSeconds" : 0,
+            "executed" : true,
+            "finishTime" : "2018-11-28T02:54:07.786209Z",
+            "finishTimeLocal" : "2018-Nov-28 10:54:07",
+            "name" : "Save Partition Data",
+            "result" : [
+               {
+                  "files" : [
+                     {
+                        "masterBootRecord" : "/root/name/K7G0KWBL/K7G0KWBL_MBR.bin"
+                     },
+                     {
+                        "partitionGPT1" : "/root/name/K7G0KWBL/K7G0KWBL_GPT1.bin"
+                     },
+                     {
+                        "partitionGPT2" : "/root/name/K7G0KWBL/K7G0KWBL_GPT2.bin"
+                     }
+                  ],
+                  "returnCode" : 0,
+                  "returnCodeDecode" : "No error."
+               }
+            ]
+         }
+      },
+      {
+         "task" : {
+            "beginTime" : "2018-11-28T02:54:07.786264Z",
+            "beginTimeLocal" : "2018-Nov-28 10:54:07",
+            "durationSeconds" : 0,
+            "executed" : true,
+            "finishTime" : "2018-11-28T02:54:07.786334Z",
+            "finishTimeLocal" : "2018-Nov-28 10:54:07",
+            "name" : "Create CSV"
+         }
+      }
+   ],
+   "type" : "HDD",
+   "worldWideName" : "0x5000cca269c04321"
+}

@@ -20,6 +20,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="tableexport" level="application" />
     <orderEntry type="library" name="bootstrap-select" level="application" />
+    <orderEntry type="module" module-name="check" />
   </component>
   <component name="TemplatesService">
     <option name="TEMPLATE_CONFIGURATION" value="Django" />

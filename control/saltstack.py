@@ -63,7 +63,6 @@ class SaltApi:
 
     def look_jid(self, jid):
         params = {'client': 'runner', 'fun': 'jobs.lookup_jid', 'jid': jid}
-        print params
         result = self.get_data(self.url, params)
         return result
 

@@ -1,0 +1,331 @@
+{
+   "PdpOutPut" : {
+      "beginTime" : "2018-11-28T06:53:40.681334Z",
+      "beginTimeLocal" : "2018-Nov-28 14:53:40",
+      "criteria" : {
+         "minimumRequiredPdpVersion" : "2.6",
+         "name" : "",
+         "updateCriteria" : false,
+         "updatePdp" : false,
+         "version" : 14
+      },
+      "criteriaVersion" : 14,
+      "durationSeconds" : 0,
+      "finishTime" : "2018-11-28T06:53:40.916734Z",
+      "finishTimeLocal" : "2018-Nov-28 14:53:40",
+      "record" : {
+         "desiredTargets" : [
+            {
+               "allDrives" : true
+            }
+         ],
+         "foundTargets" : [ "Z303FX9Z", "Z303GSPL", "K7G0KWBL", "K7GSR6LL" ]
+      },
+      "summary" : [
+         {
+            "beginTime" : "2018-11-28T06:53:40.800332Z",
+            "beginTimeLocal" : "2018-Nov-28 14:53:40",
+            "blockDevice" : "/dev/sda",
+            "blockSize" : 512,
+            "capacity" : "4 TB",
+            "driveReadyDetails" : {
+               "driveReady" : true
+            },
+            "driver" : "Linux SG",
+            "durationSeconds" : 0,
+            "finishTime" : "2018-11-28T06:53:40.915893Z",
+            "finishTimeLocal" : "2018-Nov-28 14:53:40",
+            "firmware" : "CN03",
+            "hash" : "503e168b08c7aaf6240070ccdc51bab9a40f66ca",
+            "interface" : "SATA",
+            "interfaceDetails" : {
+               "negotiatedGeneration" : "Gen3",
+               "negotiatedLinkSpeed" : "6Gb/s",
+               "supportedLinkSpeed" : "6Gb/s"
+            },
+            "manufacturer" : "Seagate Technology",
+            "model" : "ST4000NC001-1FS168",
+            "numberOfBlocks" : 7814037168,
+            "path" : "/dev/sg0",
+            "physicalBlockSize" : 4096,
+            "rawCapacity" : 4000787030016,
+            "rpm" : 5900,
+            "selfTestStatus" : "Ready",
+            "selfTestStatusNibble" : 0,
+            "serial" : "Z303FX9Z",
+            "tasks" : [
+               {
+                  "header" : {
+                     "name" : "Inventory"
+                  },
+                  "task" : {
+                     "beginTime" : "2018-11-28T06:53:40.800372Z",
+                     "beginTimeLocal" : "2018-Nov-28 14:53:40",
+                     "durationSeconds" : 0,
+                     "executed" : false,
+                     "finishTime" : "2018-11-28T06:53:40.800460Z",
+                     "finishTimeLocal" : "2018-Nov-28 14:53:40",
+                     "name" : "Inventory"
+                  }
+               }
+            ],
+            "type" : "HDD",
+            "worldWideName" : "0x5000c5007ac2a59f"
+         },
+         {
+            "beginTime" : "2018-11-28T06:53:40.800330Z",
+            "beginTimeLocal" : "2018-Nov-28 14:53:40",
+            "blockDevice" : "/dev/sdb",
+            "blockSize" : 512,
+            "capacity" : "4 TB",
+            "driveReadyDetails" : {
+               "driveReady" : true
+            },
+            "driver" : "Linux SG",
+            "durationSeconds" : 0,
+            "finishTime" : "2018-11-28T06:53:40.892720Z",
+            "finishTimeLocal" : "2018-Nov-28 14:53:40",
+            "firmware" : "CN03",
+            "hash" : "a2faf3f598426ebc6b5e62940eaca7dd4434b20c",
+            "interface" : "SATA",
+            "interfaceDetails" : {
+               "negotiatedGeneration" : "Gen3",
+               "negotiatedLinkSpeed" : "6Gb/s",
+               "supportedLinkSpeed" : "6Gb/s"
+            },
+            "manufacturer" : "Seagate Technology",
+            "model" : "ST4000NC001-1FS168",
+            "numberOfBlocks" : 7814037168,
+            "path" : "/dev/sg1",
+            "physicalBlockSize" : 4096,
+            "rawCapacity" : 4000787030016,
+            "rpm" : 5900,
+            "selfTestStatus" : "Ready",
+            "selfTestStatusNibble" : 0,
+            "serial" : "Z303GSPL",
+            "tasks" : [
+               {
+                  "header" : {
+                     "name" : "Inventory"
+                  },
+                  "task" : {
+                     "beginTime" : "2018-11-28T06:53:40.800372Z",
+                     "beginTimeLocal" : "2018-Nov-28 14:53:40",
+                     "durationSeconds" : 0,
+                     "executed" : false,
+                     "finishTime" : "2018-11-28T06:53:40.800469Z",
+                     "finishTimeLocal" : "2018-Nov-28 14:53:40",
+                     "name" : "Inventory"
+                  }
+               }
+            ],
+            "type" : "HDD",
+            "worldWideName" : "0x5000c5007acfb9a3"
+         },
+         {
+            "beginTime" : "2018-11-28T06:53:40.800147Z",
+            "beginTimeLocal" : "2018-Nov-28 14:53:40",
+            "blockDevice" : "/dev/sdc",
+            "blockSize" : 512,
+            "capacity" : "4 TB",
+            "driveReadyDetails" : {
+               "driveReady" : true
+            },
+            "driver" : "Linux SG",
+            "durationSeconds" : 0,
+            "eyeDiagramVersion" : 11,
+            "finishTime" : "2018-11-28T06:53:40.815468Z",
+            "finishTimeLocal" : "2018-Nov-28 14:53:40",
+            "firmware" : "APBDTAF0",
+            "firmwareLong" : "APBDTAF0",
+            "hash" : "69b5a2d3c633ead7be81ec046cc8113c68989be5",
+            "interface" : "SATA",
+            "interfaceDetails" : {
+               "negotiatedGeneration" : "Gen3",
+               "negotiatedLinkSpeed" : "6Gb/s",
+               "supportedLinkSpeed" : "6Gb/s"
+            },
+            "manufacturer" : "HGST a Western Digital Company",
+            "model" : "HUS726040ALE610",
+            "numberOfBlocks" : 7814037168,
+            "path" : "/dev/sg2",
+            "physicalBlockSize" : 4096,
+            "psidRequired" : false,
+            "rawCapacity" : 4000787030016,
+            "rpm" : 7200,
+            "selfTestStatus" : "Ready",
+            "selfTestStatusNibble" : 0,
+            "serial" : "K7G0KWBL",
+            "tasks" : [
+               {
+                  "header" : {
+                     "name" : "Inventory"
+                  },
+                  "task" : {
+                     "beginTime" : "2018-11-28T06:53:40.806187Z",
+                     "beginTimeLocal" : "2018-Nov-28 14:53:40",
+                     "durationSeconds" : 0,
+                     "executed" : true,
+                     "finishTime" : "2018-11-28T06:53:40.806298Z",
+                     "finishTimeLocal" : "2018-Nov-28 14:53:40",
+                     "name" : "Inventory"
+                  }
+               }
+            ],
+            "type" : "HDD",
+            "worldWideName" : "0x5000cca269c04321"
+         },
+         {
+            "beginTime" : "2018-11-28T06:53:40.800119Z",
+            "beginTimeLocal" : "2018-Nov-28 14:53:40",
+            "blockDevice" : "/dev/sdd",
+            "blockSize" : 512,
+            "capacity" : "4 TB",
+            "driveReadyDetails" : {
+               "driveReady" : true
+            },
+            "driver" : "Linux SG",
+            "durationSeconds" : 0,
+            "eyeDiagramVersion" : 11,
+            "finishTime" : "2018-11-28T06:53:40.810599Z",
+            "finishTimeLocal" : "2018-Nov-28 14:53:40",
+            "firmware" : "APBDTAF0",
+            "firmwareLong" : "APBDTAF0",
+            "hash" : "989c3983fcfbbff88094dfe58983e837c6fccadb",
+            "interface" : "SATA",
+            "interfaceDetails" : {
+               "negotiatedGeneration" : "Gen3",
+               "negotiatedLinkSpeed" : "6Gb/s",
+               "supportedLinkSpeed" : "6Gb/s"
+            },
+            "manufacturer" : "HGST a Western Digital Company",
+            "model" : "HUS726040ALE610",
+            "numberOfBlocks" : 7814037168,
+            "path" : "/dev/sg3",
+            "physicalBlockSize" : 4096,
+            "psidRequired" : false,
+            "rawCapacity" : 4000787030016,
+            "rpm" : 7200,
+            "selfTestStatus" : "Ready",
+            "selfTestStatusNibble" : 0,
+            "serial" : "K7GSR6LL",
+            "tasks" : [
+               {
+                  "header" : {
+                     "name" : "Inventory"
+                  },
+                  "task" : {
+                     "beginTime" : "2018-11-28T06:53:40.801301Z",
+                     "beginTimeLocal" : "2018-Nov-28 14:53:40",
+                     "durationSeconds" : 0,
+                     "executed" : true,
+                     "finishTime" : "2018-11-28T06:53:40.801418Z",
+                     "finishTimeLocal" : "2018-Nov-28 14:53:40",
+                     "name" : "Inventory"
+                  }
+               }
+            ],
+            "type" : "HDD",
+            "worldWideName" : "0x5000cca269cac7eb"
+         }
+      ]
+   },
+   "application" : {
+      "arch" : "x86_64",
+      "arguments" : [
+         "pdp",
+         "inventory.json",
+         "--outfile",
+         "inventory.json",
+         "-o",
+         "./test/"
+      ],
+      "build" : "lin64",
+      "drivers" : [ "Linux SG", "MEGARAID", "Adaptec" ],
+      "gitTags" : [
+         {
+            "repo" : "pdp",
+            "tag" : "0e837ff7a16450829a91849f396f424c9e0c810e"
+         },
+         {
+            "repo" : "caldera",
+            "tag" : "2c1e7f8ddc01a161ea371c926b1fb614d3e91fee"
+         },
+         {
+            "repo" : "maar",
+            "tag" : "5009c8abf447e6e7963e0d1b20450c45f237292f"
+         },
+         {
+            "repo" : "utilities",
+            "tag" : "88e2d137ea188663ca1108b07a7abfb2c8cef7db"
+         },
+         {
+            "repo" : "drivers",
+            "tag" : "21f0124e29a0e3bd3f54bccde427bdaf44949182"
+         },
+         {
+            "repo" : "clearsatalogs",
+            "tag" : "cc55358fb54ba47b46e7a49818b4b7e9cf2e0e96"
+         },
+         {
+            "repo" : "compareuserdata",
+            "tag" : "bdb28034d7821d2eaa263a05884f66017060b79c"
+         },
+         {
+            "repo" : "ipc",
+            "tag" : "9364ad0051e15309d1f43c9fa06655d6c5c740a4"
+         },
+         {
+            "repo" : "somma",
+            "tag" : "dc666b9823ac2e95331a7692da035fd2048a186a"
+         }
+      ],
+      "name" : "PDP",
+      "package" : "RPM",
+      "system" : {
+         "machine" : "x86_64",
+         "nodename" : "webcontrol",
+         "release" : "3.10.0-693.el7.x86_64",
+         "sysname" : "Linux",
+         "version" : "#1 SMP Tue Aug 22 21:09:27 UTC 2017"
+      },
+      "version" : "2.6.4",
+      "workingDirectory" : "/opt/wdc/pdp/configurations"
+   },
+   "config" : {
+      "customer" : {
+         "city" : "City",
+         "country" : "Country",
+         "failedAt" : "Other",
+         "location" : "Location",
+         "name" : "Name",
+         "state" : "State",
+         "userName" : "User's Name"
+      },
+      "diagSequences" : [
+         {
+            "header" : {
+               "description" : "List all drives",
+               "name" : "Inventory"
+            },
+            "tasks" : [
+               {
+                  "testStep" : {
+                     "name" : "Inventory"
+                  }
+               }
+            ]
+         }
+      ],
+      "header" : {
+         "description" : "This example performs a drive listing.",
+         "name" : "Inventory All Drives"
+      },
+      "targets" : [
+         {
+            "allDrives" : true
+         }
+      ],
+      "version" : "1"
+   }
+}
