@@ -36,6 +36,7 @@ class Host(models.Model):
     enclosure = models.FileField('breakin', blank=True)
     change_stat = models.CharField(max_length=255, blank=True, default="-", null=True)
     cmd_stat = models.CharField(max_length=255, blank=True, default="-", null=True)
+    message_log = models.TextField(blank=True, default="-", null=True)
 
     class Meta:
         verbose_name_plural = u'老化测试系统'
@@ -64,3 +65,44 @@ class Stat(models.Model):
 
     def __unicode__(self):
         return "%s(%s)" % (self.status, self.hostname)
+
+class HostCheck(models.Model):
+    id = models.AutoField(primary_key=True)
+    sn = models.CharField(max_length=250)
+    sn_1 = models.CharField(max_length=250)
+    name = models.CharField(max_length=250)
+    name1 = models.CharField(max_length=250)
+    family = models.CharField(max_length=250)
+    status = models.CharField(max_length=550)
+    time = models.DateTimeField()
+    boot_time = models.CharField(max_length=250)
+    cpu = models.CharField(max_length=250)
+    memory = models.CharField(max_length=250)
+    disk = models.CharField(max_length=550)
+    raid = models.CharField(max_length=550)
+    network = models.CharField(max_length=550)
+    mac = models.CharField(max_length=550)
+    mac_addr = models.CharField(max_length=550)
+    bios = models.CharField(max_length=250)
+    bmc = models.CharField(max_length=250)
+    sel = models.TextField()
+    stress_test = models.CharField(max_length=250)
+    hostname = models.CharField(max_length=250)
+    disk_num = models.IntegerField()
+    message = models.TextField()
+    fru = models.TextField()
+    smart_info = models.TextField(blank=True)
+    enclosure = models.FileField(blank=True)
+    class Meta:
+        verbose_name_plural = u'近期服务器信息'
+        verbose_name = u'服务器信息'
+    def __unicode__(self):
+        return self.sn
+
+class Smart(models.Model):
+    sn = models.CharField('sn', max_length=250)
+    sn_1 = models.CharField('sn_1', max_length=250)
+    sel = models.TextField('BMC日志',)
+    smart_info = models.TextField('数据',)
+    time = models.CharField('时间', max_length=150, blank=True)
+    explain = models.CharField('说明', max_length=550, blank=True)

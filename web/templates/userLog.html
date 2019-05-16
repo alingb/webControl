@@ -47,7 +47,11 @@
     <script src="{% static 'control/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
     <script>
         $(function () {
-            $('#userlog').DataTable();
+            $('#userlog').DataTable(
+              {
+        "order": [[ 0, "desc" ]]
+             }
+             );
         })
     </script>
 {% endblock %}

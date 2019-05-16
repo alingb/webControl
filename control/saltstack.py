@@ -18,14 +18,14 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 
-salt_api = "https://127.0.0.1:8000/"
+salt_api = "https://127.0.0.1:8080/"
 
 
 class SaltApi:
     def __init__(self, url):
         self.url = url
-        self.username = "salt-api"
-        self.password = "salt-api"
+        self.username = "saltstack"
+        self.password = "saltstack"
         self.headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36",
             "Content-type": "application/json"

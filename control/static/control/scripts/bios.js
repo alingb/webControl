@@ -147,6 +147,7 @@ function buttonStart() {
         else {
             $("#bios_name").show();
         }
+        console.log(dataval);
         $.ajax({
             type: "post",
             url: "/control/infopaser",
@@ -159,6 +160,32 @@ function buttonStart() {
                          $("#bios_name_selectpicker").append($("<option></option>").attr("value", data[i]).attr("data-content", "<span class='label label-info'>" +  data[i] + "</span>").text(data[i])).trigger("change");
                          $('#bios_name_selectpicker').selectpicker('val', '').trigger("change");
                          $('#bios_name_selectpicker').selectpicker('refresh');
+                     }
+                 }
+            }
+        })
+    });
+    $("#bmc_selectpicker").bind("change",function () {
+        let dataval = $(this).val();
+        console.log(dataval);
+        if (dataval === 0 ){
+            $("#bmc_name").hide();
+        }
+        else {
+            $("#bmc_name").show();
+        }
+        $.ajax({
+            type: "post",
+            url: "/control/infopaser",
+            data:{"val": dataval},
+            success:function (data, status) {
+                 if (status === "success") {
+                     data = jQuery.parseJSON(data);
+                     $('#bmc_name_selectpicker').find("option").remove();
+                     for (var i = 0; i < data.length; i++) {
+                         $("#bmc_name_selectpicker").append($("<option></option>").attr("value", data[i]).attr("data-content", "<span class='label label-info'>" +  data[i] + "</span>").text(data[i])).trigger("change");
+                         $('#bmc_name_selectpicker').selectpicker('val', '').trigger("change");
+                         $('#bmc_name_selectpicker').selectpicker('refresh');
                      }
                  }
             }
@@ -233,11 +260,11 @@ function buttonStart() {
                 toastr.error("请选择需要执行的设备")
             }
             else {
-                $("#myModal").modal();
-                $("#myModal").find("#myModalLabel").text("请选择BMC信息");
-                $("#bios_submit").click(function () {
-                    let name = $("#bios_selectpicker").val();
-                    let name1 = $("#bios_name_selectpicker").val();
+                $("#myModal1").modal();
+                //$("#myModal").find("#myModalLabel").text("请选择BMC信息");
+                $("#bmc_submit").click(function () {
+                    let name = $("#bmc_selectpicker").val();
+                    let name1 = $("#bmc_name_selectpicker").val();
                     $.ajax({
                         type: "post",
                         url: url,
@@ -255,7 +282,7 @@ function buttonStart() {
                     });
                     $("#bmc_button").attr({"disabled": "disabled"});
                     toastr.success('BMC Execute sucess!');
-                    $("#bios_close").click();
+                    $("#bmc_close").click();
                     setTimeout(function () {
                             $("#bios").bootstrapTable('refresh');
                         }, 3000);

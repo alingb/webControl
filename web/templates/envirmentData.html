@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>机房环境数据</title>
+ </head>
+<body>
+ 
+    <div class="bg">
+        <div class="time" id="time"></div>
+        <ul class="title">
+                <li><span></span><p>机房温度</p></li>
+                <li><span></span><p>机房湿度</p></li>
+        </ul>
+        <div id="data_content"></div>
+    </div>
+
+
+<script type="text/javascript" src="{% static "web/scripts/envirmentData.js" %}"></script></body>
+</html>

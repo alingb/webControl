@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数据中心</title>
+ </head>
+<body>
+    <div class="page">
+                <!--时间-->
+                 <div class="time">
+                         <span id="time"></span>
+                 </div>
+                 <div class="show">
+                         <div class="bigearth">
+                             <img src="{% static "./web/imgs/bg1-1.gif" %}" alt="">
+                         </div>
+                         <div class="data_area">
+                                  <div class="op">
+                                    <div id="chart1" class="chart1" class="chart-container">
+
+                                    </div>
+                                     <ul>
+                                         <li class="k">当前机器数量（台）</li>
+                                         <li class="t">Current number of machines</li>
+                                     </ul>
+                                  </div>
+                                  <div class="op">
+                                            <div id="chart2" class="chart2" class="chart-container">
+
+                                            </div>
+                                             <ul>
+                                                 <li class="k">正在测试机器数量（台）</li>
+                                                 <li class="t">The number of machines being tested</li>
+                                         </ul>
+                                 </div>
+                                 <div class="op">
+                                            <div id="chart3" class="chart3" class="chart-container">
+
+                                            </div>
+                                             <ul>
+                                                 <li class="k">待测机器数量（台）</li>
+                                                 <li class="t">Machine data to be tested</li>
+                                         </ul>
+                                 </div>
+                         </div>
+                         <div class="clear"></div>
+                 </div>
+         </div>
+<script type="text/javascript" src="{% static "web/scripts/dataSource.js" %}"></script></body>
+</html>

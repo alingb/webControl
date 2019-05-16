@@ -14,6 +14,10 @@
             <span class="glyphicon glyphicon-sort-by-order" aria-hidden="true"></span>
             FRU客制化
         </button>
+        <button id="disk_button" type="button" class="btn btn-adn">
+            <span class="glyphicon glyphicon-sort-by-order-alt" aria-hidden="true"></span>
+            硬盘格式化
+        </button>
     </div>
     <table id="bios" class="table table-hover" width="95%" align="center" style=" word-break:break-all;"></table>
 
@@ -59,6 +63,48 @@
         </div>
     </div>
 
+    <div class="modal fade bs-example-modal-lg" id="myModal1" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">请选择BMC信息</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="bmc_selectpicker" class="control-label">机器名称:</label>
+                            <select class="selectpicker" id="bmc_selectpicker" data-style="btn-primary">
+                                <option value="0" data-content="<span class='label labrl-default'>---</span>">---
+                                </option>
+                                {% for each in bios.items %}
+                                    <option value="{{ each.1 }}"
+                                            data-content="<span class='label label-success'>{{ each.1 }}</span>">
+                                        {{ each.1 }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="form-group" id="bmc_name" style="display: none">
+                            <label for="bmc_name_selectpicker" class="control-label">产品名称:</label>
+                            <select class="selectpicker" id="bmc_name_selectpicker" data-style="btn-primary">
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="bmc_close" class="btn btn-default" data-dismiss="modal"><span
+                            class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭
+                    </button>
+                    <button type="button" id="bmc_submit" class="btn btn-primary"><span
+                            class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>保存
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="modal fade bs-example-modal-lg" id="myModal2" tabindex="-1" role="dialog"
          aria-labelledby="myModalLabel">
@@ -82,7 +128,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="fru_selectpicker" class="control-label">机器名称:</label>
-                                <select class="selectpicker" name="fru_p_name" id="fru_selectpicker" data-style="btn-primary">
+                                <select class="selectpicker" name="fru_p_name" id="fru_selectpicker"
+                                        data-style="btn-primary">
                                     <option value="0" data-content="<span class='label labrl-default'>---</span>">---
                                     </option>
                                     {% for each in bios.items %}

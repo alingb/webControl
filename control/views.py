@@ -40,6 +40,14 @@ def index(req):
         stat.save()
         return HttpResponse()
     else:
+       # now_time = datetime.datetime.now()
+       # stop_time = now_time - datetime.timedelta(minutes=10)
+       # try:
+       #     host = Host.objects.filter(time__lt=stop_time)
+       #     host.update(stress_test='OS off')
+       #     host.filter(status='pass').update(status='complete')
+       # except Exception:
+       #     pass
         totalNum = Host.objects.exclude(stress_test__contains="OS off").count()
         runNum = Host.objects.filter(stress_test="running").count()
         stopNum = Host.objects.filter(stress_test__contains="OS off").count()
@@ -181,6 +189,7 @@ def serverInfo(request):
 def msgSave(username, msg):
     userexec = UserExecMsg()
     now_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+   # now_time = (datetime.datetime.now()-datetime.timedelta(hours=8)).strftime("%Y-%m-%d %H:%M")
     userexec.username = username
     userexec.addTime = now_time
     userexec.msg = msg
@@ -194,35 +203,36 @@ def checkStat(Salt, each, cmd, info, username, name, name1):
         host = Host.objects.get(sn=each['sn'], sn_1=each['sn_1'])
     except Exception:
         return HttpResponseBadRequest()
-    host.change_stat = "{}指令下发中……".format(info)
+    host.change_stat = u"{}指令下发中……".format(info)
     host.save()
     time.sleep(1)
     try:
         salt_jid = Salt.salt_async_command('{}'.format(each['ip']), 'cmd.run', [cmd])
         if salt_jid:
-            host.change_stat = "{}指令执行中……".format(info)
+            host.change_stat = u"{}指令执行中……".format(info)
             host.save()
             while 1:
                 salt_msg = Salt.look_jid(salt_jid)
                 if salt_msg:
+                  #  print salt_msg[each['ip']]
                     if salt_msg[each['ip']] == "True":
-                        host.change_stat = "{}客制化完成".format(info)
+                        host.change_stat = u"{}客制化完成".format(info)
                         host.save()
-                        msg = "机器名称为:{0},产品名称为:{1}的设备(SN:{2},SN_1:{3})刷新{4}版本成功".format(name, name1, each['sn'],
+                        msg = u"机器名称为:{0},产品名称为:{1}的设备(SN:{2},SN_1:{3})刷新{4}版本成功".format(name, name1, each['sn'],
                                                                                         each['sn_1'], info)
                         msgSave(username, msg)
                     else:
-                        host.change_stat = "{}客制化失败".format(info)
+                        host.change_stat = u"{}客制化失败".format(info)
                         host.save()
-                        msg = "机器名称为:{0},产品名称为:{1}的设备(SN:{2},SN_1:{3})刷新{4}版本失败".format(name, name1, each['sn'],
+                        msg = u"机器名称为:{0},产品名称为:{1}的设备(SN:{2},SN_1:{3})刷新{4}版本失败".format(name, name1, each['sn'],
                                                                                         each['sn_1'], info)
                         msgSave(username, msg)
                     break
                 else:
                     time.sleep(1)
     except Exception:
-        host.change_stat = "{}指令执行失败".format(info)
-        msg = "机器名称为:{},产品名称为:{}的设备刷新{}版本失败".format(name, name1, info)
+        host.change_stat = u"{}指令执行失败".format(info)
+        msg = u"机器名称为:{},产品名称为:{}的设备刷新{}版本失败".format(name, name1, info)
         msgSave(username, msg)
         host.save()
 
@@ -230,21 +240,21 @@ def checkStat(Salt, each, cmd, info, username, name, name1):
 @login_required
 def control(req):
     username = req.user.username
-    salt_api = "https://127.0.0.1:8000/"
+    salt_api = "https://127.0.0.1:8080/"
     Salt = SaltApi(salt_api)
     state = req.POST.get('state')
     name = req.POST.get('name')
     name1 = req.POST.get('name1')
     file = req.FILES.get('fru_sn')
     if state == "bios":
-        cmd = '/control/{}/BIOS_lnx64.sh {}'.format(name, name1)
+        cmd = '/control/BIOS_lnx64.sh {} {}'.format(name, name1)
         msg = req.POST.get('msg')
         if msg:
             msg = json.loads(msg)
             for each in msg:
                 checkStat(Salt, each, cmd, 'BIOS', username, name, name1)
     elif state == "bmc":
-        cmd = '/control/{}/BMC_lnx64.sh {}'.format(name, name1)
+        cmd = '/control/BMC_lnx64.sh {} {}'.format(name, name1)
         msg = req.POST.get('msg')
         if msg:
             msg = json.loads(msg)
@@ -356,7 +366,6 @@ def controlDeatil(req, ID):
     return render(req, 'detail.html', {'form': dic, 'all': form})
 
 
-@login_required()
 def msgParsePost(req):
     if req.method == "POST":
         info = json.loads(req.body)
@@ -393,10 +402,13 @@ def msgParsePost(req):
             host.ip = info['ip']
         if info['smart_info']:
             host.smart_info = info['smart_info']
+        if info['message_log']:
+            host.message_log = info['message_log']
         try:
             host.enclosure = File(info['enclosure'])
         except Exception:
             pass
         host.save()
+        return HttpResponse('yes')
     return HttpResponse('ok')
 

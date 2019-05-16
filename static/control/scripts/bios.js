@@ -4,9 +4,9 @@ $(document).ready(function () {
     oFileTable.Init();
     addclass();
     buttonStart();
-    setInterval(function() {
+    setInterval(function () {
         $("#bios").bootstrapTable('refresh');
-}, 10000);
+    }, 10000);
 });
 
 
@@ -22,7 +22,7 @@ var FileTableInit = function () {
         $('#bios').bootstrapTable({
             url: '/control/serverinfo?state=wait',         //请求后台的URL（*）
             method: 'get',    //请求方式（*）
-            contentType:"application/x-www-form-urlencoded; charset=UTF-8",
+            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
             toolbar: '#toolbar',                //工具按钮用哪个容器
             striped: true,                      //是否显示行间隔色
             cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
@@ -116,7 +116,7 @@ var FileTableInit = function () {
                 field: 'stress_test',
                 title: '运行状态',
                 sortable: true
-            },{
+            }, {
                 field: 'change_stat',
                 title: '执行状态',
                 sortable: true
@@ -139,34 +139,61 @@ var FileTableInit = function () {
 
 
 function buttonStart() {
-    $("#bios_selectpicker").bind("change",function () {
+    $("#bios_selectpicker").bind("change", function () {
         let dataval = $(this).val();
-        if (dataval === 0 ){
+        if (dataval === 0) {
             $("#bios_name").hide();
         }
         else {
             $("#bios_name").show();
         }
+        console.log(dataval);
         $.ajax({
             type: "post",
             url: "/control/infopaser",
-            data:{"val": dataval},
-            success:function (data, status) {
-                 if (status === "success") {
-                     data = jQuery.parseJSON(data);
-                     $('#bios_name_selectpicker').find("option").remove();
-                     for (var i = 0; i < data.length; i++) {
-                         $("#bios_name_selectpicker").append($("<option></option>").attr("value", data[i]).attr("data-content", "<span class='label label-info'>" +  data[i] + "</span>").text(data[i])).trigger("change");
-                         $('#bios_name_selectpicker').selectpicker('val', '').trigger("change");
-                         $('#bios_name_selectpicker').selectpicker('refresh');
-                     }
-                 }
+            data: {"val": dataval},
+            success: function (data, status) {
+                if (status === "success") {
+                    data = jQuery.parseJSON(data);
+                    $('#bios_name_selectpicker').find("option").remove();
+                    for (var i = 0; i < data.length; i++) {
+                        $("#bios_name_selectpicker").append($("<option></option>").attr("value", data[i]).attr("data-content", "<span class='label label-info'>" + data[i] + "</span>").text(data[i])).trigger("change");
+                        $('#bios_name_selectpicker').selectpicker('val', '').trigger("change");
+                        $('#bios_name_selectpicker').selectpicker('refresh');
+                    }
+                }
             }
         })
     });
-    $("#fru_selectpicker").bind("change",function () {
+    $("#bmc_selectpicker").bind("change", function () {
         let dataval = $(this).val();
-        if (dataval === 0 ){
+        console.log(dataval);
+        if (dataval === 0) {
+            $("#bmc_name").hide();
+        }
+        else {
+            $("#bmc_name").show();
+        }
+        $.ajax({
+            type: "post",
+            url: "/control/infopaser",
+            data: {"val": dataval},
+            success: function (data, status) {
+                if (status === "success") {
+                    data = jQuery.parseJSON(data);
+                    $('#bmc_name_selectpicker').find("option").remove();
+                    for (var i = 0; i < data.length; i++) {
+                        $("#bmc_name_selectpicker").append($("<option></option>").attr("value", data[i]).attr("data-content", "<span class='label label-info'>" + data[i] + "</span>").text(data[i])).trigger("change");
+                        $('#bmc_name_selectpicker').selectpicker('val', '').trigger("change");
+                        $('#bmc_name_selectpicker').selectpicker('refresh');
+                    }
+                }
+            }
+        })
+    });
+    $("#fru_selectpicker").bind("change", function () {
+        let dataval = $(this).val();
+        if (dataval === 0) {
             $("#fru_name").hide();
         }
         else {
@@ -175,17 +202,17 @@ function buttonStart() {
         $.ajax({
             type: "post",
             url: "/control/infopaser",
-            data:{"val": dataval},
-            success:function (data, status) {
-                 if (status === "success") {
-                     data = jQuery.parseJSON(data);
-                     $('#fru_name_selectpicker').find("option").remove();
-                     for (var i = 0; i < data.length; i++) {
-                         $("#fru_name_selectpicker").append($("<option></option>").attr("value", data[i]).attr("data-content", "<span class='label label-info'>" +  data[i] + "</span>").text(data[i])).trigger("change");
-                         $('#fru_name_selectpicker').selectpicker('val', '').trigger("change");
-                         $('#fru_name_selectpicker').selectpicker('refresh');
-                     }
-                 }
+            data: {"val": dataval},
+            success: function (data, status) {
+                if (status === "success") {
+                    data = jQuery.parseJSON(data);
+                    $('#fru_name_selectpicker').find("option").remove();
+                    for (var i = 0; i < data.length; i++) {
+                        $("#fru_name_selectpicker").append($("<option></option>").attr("value", data[i]).attr("data-content", "<span class='label label-info'>" + data[i] + "</span>").text(data[i])).trigger("change");
+                        $('#fru_name_selectpicker').selectpicker('val', '').trigger("change");
+                        $('#fru_name_selectpicker').selectpicker('refresh');
+                    }
+                }
             }
         })
     });
@@ -220,8 +247,8 @@ function buttonStart() {
                     toastr.success('BIOS Execute sucess!');
                     $("#bios_close").click();
                     setTimeout(function () {
-                            $("#bios").bootstrapTable('refresh');
-                        }, 3000);
+                        $("#bios").bootstrapTable('refresh');
+                    }, 3000);
                 });
             }
         }
@@ -233,11 +260,11 @@ function buttonStart() {
                 toastr.error("请选择需要执行的设备")
             }
             else {
-                $("#myModal").modal();
-                $("#myModal").find("#myModalLabel").text("请选择BMC信息");
-                $("#bios_submit").click(function () {
-                    let name = $("#bios_selectpicker").val();
-                    let name1 = $("#bios_name_selectpicker").val();
+                $("#myModal1").modal();
+                //$("#myModal").find("#myModalLabel").text("请选择BMC信息");
+                $("#bmc_submit").click(function () {
+                    let name = $("#bmc_selectpicker").val();
+                    let name1 = $("#bmc_name_selectpicker").val();
                     $.ajax({
                         type: "post",
                         url: url,
@@ -255,10 +282,10 @@ function buttonStart() {
                     });
                     $("#bmc_button").attr({"disabled": "disabled"});
                     toastr.success('BMC Execute sucess!');
-                    $("#bios_close").click();
+                    $("#bmc_close").click();
                     setTimeout(function () {
-                            $("#bios").bootstrapTable('refresh');
-                        }, 3000);
+                        $("#bios").bootstrapTable('refresh');
+                    }, 3000);
                 });
             }
         }
@@ -281,10 +308,36 @@ function buttonStart() {
                     $("#fru_form").submit();
                     $("#fru_close").click();
                     setTimeout(function () {
-                            $("#bios").bootstrapTable('refresh');
-                        }, 3000);
+                        $("#bios").bootstrapTable('refresh');
+                    }, 3000);
                 }
             );
+        }
+    });
+    $("#disk_button").click(function () {
+        let table = $("#bios").bootstrapTable('getSelections');
+        if (table.length <= 0) {
+            toastr.error("请选择需要执行的设备")
+        } else {
+            $.ajax({
+                type: "post",
+                url: url,
+                data: {"state": "disk", "msg": JSON.stringify(table)},
+                // success: function (data, status) {
+                //     if (status === "success") {
+                //         toastr.success('BIOS Execute sucess!');
+                //         $("#bios").bootstrapTable('refresh');
+                //     }
+                //
+                // },
+                error: function () {
+                    toastr.error('DISK CLEAR Execute Error!');
+                }
+            });
+            toastr.success('DISK CLEAR Execute sucess!');
+            setTimeout(function () {
+                $("#bios").bootstrapTable('refresh');
+            }, 3000);
         }
     })
 }

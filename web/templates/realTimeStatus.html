@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>机器测试实时状态</title>
+ </head>
+<body>
+   
+    <div class="background">
+
+        <div class="press_title">
+               CPU压力
+        </div>
+
+        <div class="press_data" id="press_data"> 
+            
+        </div>
+
+        <div class="chart-warpper">
+          <svg class="hook"></svg>   
+        </div>
+
+
+    </div>
+
+
+<script type="text/javascript" src="{% static "web/scripts/realTimeStatus.js" %}"></script></body>
+</html>

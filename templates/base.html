@@ -2,8 +2,8 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>管理系统</title>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <link rel="stylesheet" href="{% static 'control/bower_components/bootstrap/dist/css/bootstrap.min.css' %}">
@@ -11,7 +11,9 @@
     <link rel="stylesheet" href="{% static 'control/bower_components/Ionicons/css/ionicons.min.css' %}">
     <link rel="stylesheet" href="{% static 'control/dist/css/AdminLTE.min.css' %}">
     <link rel="stylesheet" href="{% static 'control/dist/css/skins/skin-blue.min.css' %}">
+    
     <link rel="stylesheet" href="{% static "control/css/bootstrap-table.min.css" %}">
+    <link href="https://unpkg.com/bootstrap-table@1.14.2/dist/bootstrap-table.min.css" rel="stylesheet">
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.3/css/bootstrap-select.min.css">
     <link rel="stylesheet" href="{% static "control/css/toastr.css" %}">
@@ -22,7 +24,7 @@
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue sidebar-collapse sidebar-mini">
 <div class="wrapper">
     <header class="main-header">
         <a href="{% url "index" %}" class="logo">
@@ -130,7 +132,13 @@
 <script src="{% static "control/scripts/bootstrap-table.min.js" %}"></script>
 <script src="{% static "control/scripts/bootstrap-table-zh-CN.min.js" %}"></script>
 <script src="{% static "control/scripts/bootstrap-table-export.js" %}"></script>
+
+<script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.14.2/dist/bootstrap-table.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.14.2/dist/bootstrap-table-locale-all.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.14.2/dist/extensions/export/bootstrap-table-export.min.js"></script>
 <script src="{% static "control/scripts/tableExport.js" %}"></script>
+
 <script src="{% static "control/scripts/toastr.min.js" %}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.3/js/bootstrap-select.min.js"></script>
 {% block script %}
