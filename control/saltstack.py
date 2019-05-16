@@ -7,7 +7,6 @@
 """
 
 import json
-
 import requests
 
 try:
@@ -15,8 +14,8 @@ try:
 except:
     import http.cookiejar as cookielib
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
-requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 salt_api = "https://127.0.0.1:8080/"
 
@@ -40,7 +39,7 @@ class SaltApi:
 
     def get_data(self, url, params):
         send_data = json.dumps(params)
-        request = requests.post(url, data=send_data, headers=self.headers, verify=False )
+        request = requests.post(url, data=send_data, headers=self.headers, verify=False)
         response = request.json()
         result = dict(response)
         return result['return'][0]

@@ -11,15 +11,13 @@ from django.core.files import File
 from saltstack import SaltApi
 from django.db.models import Q
 from django.forms import model_to_dict
-from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseBadRequest, Http404
 from django.shortcuts import render
 from web.models import *
 from .models import *
 
 
 # Create your views here.
-
-
 
 
 @login_required
@@ -40,14 +38,14 @@ def index(req):
         stat.save()
         return HttpResponse()
     else:
-       # now_time = datetime.datetime.now()
-       # stop_time = now_time - datetime.timedelta(minutes=10)
-       # try:
-       #     host = Host.objects.filter(time__lt=stop_time)
-       #     host.update(stress_test='OS off')
-       #     host.filter(status='pass').update(status='complete')
-       # except Exception:
-       #     pass
+        # now_time = datetime.datetime.now()
+        # stop_time = now_time - datetime.timedelta(minutes=10)
+        # try:
+        #     host = Host.objects.filter(time__lt=stop_time)
+        #     host.update(stress_test='OS off')
+        #     host.filter(status='pass').update(status='complete')
+        # except Exception:
+        #     pass
         totalNum = Host.objects.exclude(stress_test__contains="OS off").count()
         runNum = Host.objects.filter(stress_test="running").count()
         stopNum = Host.objects.filter(stress_test__contains="OS off").count()
@@ -127,8 +125,6 @@ def serverDetail(request):
         return HttpResponse(json.dumps({"rows": data, "total": lenth}))
 
 
-
-
 @login_required
 def bios(req):
     Bios = {1: "D51B",
@@ -150,6 +146,7 @@ def bios(req):
 @login_required
 def execute(req):
     return render(req, 'execute.html')
+
 
 @login_required()
 def serverInfo(request):
@@ -189,7 +186,7 @@ def serverInfo(request):
 def msgSave(username, msg):
     userexec = UserExecMsg()
     now_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-   # now_time = (datetime.datetime.now()-datetime.timedelta(hours=8)).strftime("%Y-%m-%d %H:%M")
+    # now_time = (datetime.datetime.now()-datetime.timedelta(hours=8)).strftime("%Y-%m-%d %H:%M")
     userexec.username = username
     userexec.addTime = now_time
     userexec.msg = msg
@@ -214,18 +211,18 @@ def checkStat(Salt, each, cmd, info, username, name, name1):
             while 1:
                 salt_msg = Salt.look_jid(salt_jid)
                 if salt_msg:
-                  #  print salt_msg[each['ip']]
+                    #  print salt_msg[each['ip']]
                     if salt_msg[each['ip']] == "True":
                         host.change_stat = u"{}客制化完成".format(info)
                         host.save()
                         msg = u"机器名称为:{0},产品名称为:{1}的设备(SN:{2},SN_1:{3})刷新{4}版本成功".format(name, name1, each['sn'],
-                                                                                        each['sn_1'], info)
+                                                                                         each['sn_1'], info)
                         msgSave(username, msg)
                     else:
                         host.change_stat = u"{}客制化失败".format(info)
                         host.save()
                         msg = u"机器名称为:{0},产品名称为:{1}的设备(SN:{2},SN_1:{3})刷新{4}版本失败".format(name, name1, each['sn'],
-                                                                                        each['sn_1'], info)
+                                                                                         each['sn_1'], info)
                         msgSave(username, msg)
                     break
                 else:
@@ -260,6 +257,13 @@ def control(req):
             msg = json.loads(msg)
             for each in msg:
                 checkStat(Salt, each, cmd, 'BMC', username, name, name1)
+    elif state == "disk_clear":
+        cmd = "/control/disk_clear"
+        msg = req.POST.get("msg")
+        if msg:
+            msg = json.loads(msg)
+            for each in msg:
+                Salt.cmd(each['ip'], cmd)
     elif file:
         sn = file.readlines()
         msg = req.POST.get('msg')
@@ -295,7 +299,8 @@ def control(req):
                     try:
                         host.cmd_stat = "指令执行中……"
                         host.save()
-                        Salt.salt_async_command('{}'.format(each['ip']), 'service.start', ['trusme-{}'.format(i.lower())])
+                        Salt.salt_async_command('{}'.format(each['ip']), 'service.start',
+                                                ['trusme-{}'.format(i.lower())])
                         msg = "设备名称为sn:{},sn_1:{}执行{}操作".format(each['sn'], each['sn_1'], i)
                         msgSave(username, msg)
                         while 1:
@@ -334,7 +339,8 @@ def infoPaser(req):
         "ESC8000G3": ['RG-RCD16000Pro-3D'],
         "P10S-M-DC": ['P10S-M-DC'],
         "Z10PA-D8": ['tianrongxin'],
-        "K880G3": ['RG-RCD6000-Main', 'RG-RCD6000-Office', 'RG-iData-Server', 'RG-RACC5000', 'RG-RCD3000-Office', 'RG-RCD6000EV3', 'haiyunjiexun'],
+        "K880G3": ['RG-RCD6000-Main', 'RG-RCD6000-Office', 'RG-iData-Server', 'RG-RACC5000', 'RG-RCD3000-Office',
+                   'RG-RCD6000EV3', 'haiyunjiexun'],
         "N880G2": ['Meidian'],
         "SR205-2": ['DT-G2-U211', 'CZ-2U-K888G4'],
     }
@@ -353,14 +359,14 @@ def controlDeatil(req, ID):
             ALL_LIST.append(re_info[0])
     for i in xrange(len(ALL_LIST)):
         try:
-            info = message.split(ALL_LIST[i+1])[0].strip()
-            split_info = ALL_LIST[i] +  ':'
+            info = message.split(ALL_LIST[i + 1])[0].strip()
+            split_info = ALL_LIST[i] + ':'
             try:
                 data = info.split(split_info)[1].strip()
-            except:
+            except Exception:
                 data = ''
             dic[ALL_LIST[i].replace(' ', '_')] = data.strip()
-        except:
+        except Exception:
             info = message.split(ALL_LIST[i])[0]
             dic[ALL_LIST[i].replace(' ', '_')] = info.split(':')[1]
     return render(req, 'detail.html', {'form': dic, 'all': form})
@@ -410,5 +416,5 @@ def msgParsePost(req):
             pass
         host.save()
         return HttpResponse('yes')
-    return HttpResponse('ok')
-
+    else:
+        return HttpResponse("404 Not Found")
